@@ -66,7 +66,7 @@
             <div class="d-flex align-items-start justify-content-end gap-2">
             
               
-               @include('profile.partials.delete-user-form')
+               
               
              
              <div>
@@ -133,20 +133,28 @@
           <div>
            <ul class="list-unstyled mb-0">
             <li>
-             <a class="py-2 d-block text-muted" href="#">
+             <a class="py-2 d-block text-muted" href="https://amirdev.page.gd">
               <i class="mdi mdi-web text-primary me-1">
               </i>
               Website
              </a>
             </li>
             <li>
-             <a class="py-2 d-block text-muted" href="#">
+             <a class="py-2 d-block text-muted" href="https://textopia.42web.io">
               <i class="mdi mdi-note-text-outline text-primary me-1">
               </i>
               Blog
              </a>
             </li>
+             <li>
+             <a class="py-2 d-block text-muted" href="https://tezkornews.ct.ws">
+              <i class="mdi mdi-note-text-outline text-primary me-1">
+              </i>
+             News Blog
+             </a>
+            </li>
            </ul>
+           
           </div>
          </div>
          <!-- end card body -->
@@ -158,6 +166,7 @@
            Similar Profiles
           </h5>
           <div class="list-group list-group-flush">
+            @foreach($users as $user)
            <a class="list-group-item list-group-item-action" href="#">
             <div class="d-flex align-items-center">
              <div class="avatar-sm flex-shrink-0 me-3">
@@ -166,52 +175,16 @@
              <div class="flex-grow-1">
               <div>
                <h5 class="font-size-14 mb-1">
-                James Nix
+                {{ $user->name }}
                </h5>
                <p class="font-size-13 text-muted mb-0">
-                Full Stack Developer
+                {{ $user->role->name ?? 'Role not assignment' }}
                </p>
               </div>
              </div>
             </div>
            </a>
-           <a class="list-group-item list-group-item-action" href="#">
-            <div class="d-flex align-items-center">
-             <div class="avatar-sm flex-shrink-0 me-3">
-              <img alt="" class="img-thumbnail rounded-circle" src="assets/images/users/avatar-3.jpg"/>
-             </div>
-             <div class="flex-grow-1">
-              <div>
-               <h5 class="font-size-14 mb-1">
-                Darlene Smith
-               </h5>
-               <p class="font-size-13 text-muted mb-0">
-                UI/UX Designer
-               </p>
-              </div>
-             </div>
-            </div>
-           </a>
-           <a class="list-group-item list-group-item-action" href="#">
-            <div class="d-flex align-items-center">
-             <div class="avatar-sm flex-shrink-0 me-3">
-              <div class="avatar-title bg-light-subtle text-light rounded-circle font-size-22">
-               <i class="bx bxs-user-circle">
-               </i>
-              </div>
-             </div>
-             <div class="flex-grow-1">
-              <div>
-               <h5 class="font-size-14 mb-1">
-                William Swift
-               </h5>
-               <p class="font-size-13 text-muted mb-0">
-                Backend Developer
-               </p>
-              </div>
-             </div>
-            </div>
-           </a>
+          @endforeach
           </div>
          </div>
          <!-- end card body -->

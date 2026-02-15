@@ -18,7 +18,7 @@
                         </a>
                      </li>
                      <li>
-                        <a href="index.html">
+                        <a href="{{ route('medicine.index') }}">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
@@ -27,7 +27,7 @@
                         </a>
                      </li>
                       <li>
-                        <a href="index.html">
+                        <a href="{{ route('category.index')}}">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">

@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,11 +14,21 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+
+
+
+
+
 Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/', function (){
         return view('admin.index');
 
     });
+    Route::resource('/medicine',  MedicineController::class );
+    Route::resource('/category', CategoryController::class);
+
 });
 
 
@@ -32,6 +43,7 @@ Route::middleware('auth')->group(function () {
    
     Route::get('/profile', [ProfileController::class, 'index'])
         ->name('profile.index');
+
     });
 
 require __DIR__.'/auth.php';
