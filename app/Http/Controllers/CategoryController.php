@@ -35,20 +35,26 @@ class CategoryController extends Controller
 
 
 
-    public function edit(){
-
+    public function edit(Category $category){
+   
+    return view('admin.category.edit', compact('category'));
     }
 
 
 
-    public function update(){
-        
+    public function update(Request $request, Category $category){
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255'
+        ]);
+        $category->update($validated);
+        return redirect()->route('category.index')->with('success', 'Malumot yangilndi');
     }
 
 
-     public function destroy(Category $categories){
+     public function destroy(Category $category){
     
-    $categories->delete();
+    $category->delete();
     return redirect()->route('category.index')->with('success', 'Malumot ochirildi');
     }
 }           

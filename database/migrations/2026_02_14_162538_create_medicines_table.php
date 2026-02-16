@@ -32,7 +32,7 @@ return new class extends Migration
     
     $table->string('image')->nullable(); // Dori rasmi (professional panelda rasm bo'lgani yaxshi)
     $table->boolean('is_active')->default(true); // Sotuvda bormi yoki yo'q
-    
+    $table->softDeletes();
     $table->timestamps();
 });
     }

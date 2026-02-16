@@ -75,7 +75,12 @@
              <td>
                 <a href="{{ route('category.edit', $category->id) }}">edit</a> <br>
             <a href="{{ route('category.show', $category->id) }}">ko'rish</a>
-            <a href="{{ route('category.destroy', $category->id) }}">delete</a>
+
+            <form action="{{ route('category.destroy', $category->id) }}"  method ="POST">
+              @csrf
+              @method('DELETE').
+              <input type="submit" value="ochir">
+            </form>
              </td>
              @endforeach
             </tr>

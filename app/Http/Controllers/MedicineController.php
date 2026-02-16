@@ -45,7 +45,7 @@ public function store(Request $request)
 
     Medicine::create($validated);
 
-    return redirect()->with('success', 'Mahsulot saqlandi');
+    return redirect()->back()->with('success', 'Mahsulot saqlandi');
 }
 
 
@@ -98,7 +98,7 @@ public function store(Request $request)
     if($medicine->image){
         Storage::disk('public')->delete($medicine->image);
     }
-    $medicine->delete();
+    $medicine->delete($medicine = 'deleted_at' );
     return redirect()->route('medicine.index')->with('success', 'Malumot ochirildi');
     }
 }
