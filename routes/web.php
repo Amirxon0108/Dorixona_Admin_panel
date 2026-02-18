@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SupplierController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
     });
     Route::resource('/medicine',  MedicineController::class );
     Route::resource('/category', CategoryController::class);
+    Route::resource('/supplier', SuppliersController::class);
 
 });
 
@@ -43,6 +46,7 @@ Route::middleware('auth')->group(function () {
    
     Route::get('/profile', [ProfileController::class, 'index'])
         ->name('profile.index');
+
 
     });
 

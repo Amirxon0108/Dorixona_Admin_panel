@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
+
 class SupplierController extends Controller
 {
     /**
@@ -12,7 +13,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $suppliers = Supplier::all();
+        return view('admin.suppliers.index', compact('suppliers'));
     }
 
     /**
@@ -20,15 +22,22 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.suppliers.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Supplier $supplier)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|numeric',
+            'address' => 'required|string|max:255'
+        ]);
+
+        $supplier->store($validated);
+        return redirect()->route('admin.suppliers.index')->with('success', 'malumot qoshildi');
     }
 
     /**
@@ -36,7 +45,7 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        return view('admin.suppliers.show', compact('supplier'));
     }
 
     /**
@@ -44,7 +53,7 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        //
+        return view('admin.suppliers.edit', compact('supplier'));
     }
 
     /**
@@ -52,7 +61,15 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+         $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|numeric',
+            'address' => 'required|string|max:255'
+        ]);
+
+        $supplier->update($validated);
+
+        return redirect()->route('adi')
     }
 
     /**
@@ -60,6 +77,7 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        $supplier->delete();
+        return redirect()->route('admin.suppliers.index')->with('succes', 'Malumot ochirildi');
     }
 }
