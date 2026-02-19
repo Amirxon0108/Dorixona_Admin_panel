@@ -69,7 +69,7 @@ class SupplierController extends Controller
 
         $supplier->update($validated);
 
-        return redirect()->route('adi')
+        return redirect()->route('admin.suppliers.index')->with('success', 'yangilandi');
     }
 
     /**
