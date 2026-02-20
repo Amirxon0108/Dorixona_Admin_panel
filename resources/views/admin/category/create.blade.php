@@ -14,6 +14,14 @@
         </div>
     </div>
 @endif
+@if(session()->has(key: 'success'))  <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-primary">
+                {!! session('success') !!}
+            </div>
+        </div>
+    </div>
+@endif
         </div>
 
         <div class="card-body">
@@ -44,7 +52,7 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-3"> 
                     <label class="form-label">Ona kategoriya (ixtiyoriy):</label>
 <select class="form-control name="parent_id">
     <option value="">-- Asosiy kategoriya --</option> @foreach($categories as $category)

@@ -66,10 +66,10 @@
              </td>
             
              <td>
-             {{ $supplier->parent_id }}
+             {{ $supplier->phone }}
              </td>
              <td>
-              {{ $supplier->slug }}
+              {{ $supplier->address }}
              </td>
              
              <td>

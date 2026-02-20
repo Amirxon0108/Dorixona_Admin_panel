@@ -9,7 +9,7 @@
                         Menu
                      </li>
                      <li>
-                        <a href="index.html">
+                        <a href="/">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
@@ -54,7 +54,7 @@
                         </a>
                      </li>
                       <li>
-                        <a href="index.html">
+                        <a href="{{  route('supplier.index')}}">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
@@ -63,12 +63,12 @@
                         </a>
                      </li>
                       <li>
-                        <a href="index.html">
+                        <a href="">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
                         Users
-                        </span>
+                        </span> 
                         </a>
                      </li>
                       <li>

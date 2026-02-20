@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
     });
     Route::resource('/medicine',  MedicineController::class );
     Route::resource('/category', CategoryController::class);
-    Route::resource('/supplier', SuppliersController::class);
+    Route::resource('/supplier', SupplierController::class);
 
 });
 

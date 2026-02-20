@@ -36,8 +36,8 @@ class SupplierController extends Controller
             'address' => 'required|string|max:255'
         ]);
 
-        $supplier->store($validated);
-        return redirect()->route('admin.suppliers.index')->with('success', 'malumot qoshildi');
+        $supplier->create($validated);
+        return redirect()->back()->with('success', 'malumot qoshildi');
     }
 
     /**
@@ -69,7 +69,7 @@ class SupplierController extends Controller
 
         $supplier->update($validated);
 
-        return redirect()->route('admin.suppliers.index')->with('success', 'yangilandi');
+        return redirect()->route('supplier.index')->with('success', 'yangilandi');
     }
 
     /**
@@ -78,6 +78,6 @@ class SupplierController extends Controller
     public function destroy(Supplier $supplier)
     {
         $supplier->delete();
-        return redirect()->route('admin.suppliers.index')->with('succes', 'Malumot ochirildi');
+        return redirect()->back()->with('succes', 'Malumot ochirildi');
     }
 }
