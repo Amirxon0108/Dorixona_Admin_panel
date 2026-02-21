@@ -36,7 +36,7 @@
                         </a>
                      </li>
                       <li>
-                        <a href="index.html">
+                        <a href="{{route('purchase.index')}}">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Medicines')
+@section('title', 'purchases')
 
 @section('content')
 
@@ -18,22 +18,6 @@
             <a href="javascript: void(0);">
              Tables
             </a>
-                        @if(session()->has('error'))  <div class="row">
-        <div class="col-sm-12">
-            <div class="alert alert-danger">
-                {!! session('error') !!}
-            </div>
-        </div>
-    </div>
-@endif
-@if(session()->has(key: 'success'))  <div class="row">
-        <div class="col-sm-12">
-            <div class="alert alert-primary">
-                {!! session('success') !!}
-            </div>
-        </div>
-    </div>
-@endif
            </li>
            <li class="breadcrumb-item active">
             DataTables
@@ -52,47 +36,68 @@
            Default Datatable
           </h4>
           <p class="card-title-desc">
-            <a href="{{ route('category.create') }}">Yangi qo'shish</a>           
+            <a href="{{ route('purchase.create') }}">Yangi qo'shish</a>           
           </p>
          </div>
          <div class="card-body">
           <table class="table table-bordered dt-responsive nowrap w-100" id="datatable">
            <thead>
             <tr>
+            
              <th>
-              Nomi
+              Yetkazib ber
              </th>
              <th>
-              Tartibi
-             </th>
-             <th>
-              Slug
+             olgan
              </th>
              
               <th>
-              Action
+             nomer
              </th>
+             <th>
+             olingan sana
+             </th>
+            <th>
+             jami
+             </th>
+             <th>
+             description
+             </th>
+             <th>
+             Action
+             </th>
+             
+            
             </tr>
            </thead>
            <tbody>
-            @foreach ($categories as $category)
+            @foreach ($purchases as $purchase)
             <tr>
              <td>
-              {{ $category->name }}
+              {{ $purchase->supplier_id }}
              </td>
             
              <td>
-             {{ $category->parent_id }}
+             {{ $purchase->user_id }}
              </td>
              <td>
-              {{ $category->slug }}
+              {{ $purchase->purchase_no }}
+             </td>
+             <td>
+              {{ $purchase->purchase_date }}
+             </td>
+             <td>
+              {{ $purchase->total_amount }}
+             </td>
+             <td>
+              {{ $purchase->description }}
              </td>
              
              <td>
-                <a href="{{ route('category.edit', $category->id) }}">edit</a> <br>
-            <a href="{{ route('category.show', $category->id) }}">ko'rish</a>
+                <a href="{{ route('purchase.edit', $purchase->id) }}">edit</a> <br>
+            <a href="{{ route('purchase.show', $purchase->id) }}">ko'rish</a>
 
-            <form action="{{ route('category.destroy', $category->id) }}"  method ="POST">
+            <form action="{{ route('purchase.destroy', $purchase->id) }}"  method ="POST">
               @csrf
               @method('DELETE').
               <input type="submit" value="ochir">

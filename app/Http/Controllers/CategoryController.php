@@ -24,7 +24,7 @@ class CategoryController extends Controller
         ]);
 
         Category::create($validated);
-        redirect()->back()->with('succes','Malumot saqlandi');
+        return redirect()->route('category.index')->with('succes','Malumot saqlandi');
     }
 
 
