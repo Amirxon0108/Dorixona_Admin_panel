@@ -38,22 +38,39 @@ public function store(Request $request){
     return redirect()->back()->with('success', 'malumot qoshildi');
 }
 
-public function show(){
+public function show(Purchase $purchase){
 
+
+return view('admin.purchases.show', compact('purchase'));
 }
 
 
-public function edit(){
-
+public function edit(Purchase $purchase){
+$suppliers = Supplier::all();
+$users = User::all();
+return view('admin.purchases.edit', compact('purchase', 'suppliers', 'users'));
 }
 
 
-public function update(){
+public function update(Request $request, Purchase $purchase){
 
+$validated = $request->validate([
+      'supplier_id'    => 'required|exists:suppliers,id',
+        'user_id'       => 'required|exists:users,id',
+        'purchase_no'   => 'required|string',
+        'purchase_date' => 'required|date',
+        'total_amount'  => 'required|numeric',
+        'description'   => 'required|string',
+]);
+
+$purchase->update($validated);
+
+return redirect()->route('purchase.index')->with('success', 'Malumot yangilandi ');
 }
 
 
-public function destroy(){
-    
+public function destroy(Purchase $purchase){
+ $purchase->delete();
+ return redirect()->route('purchase.index')->with('success', 'Malumot ochirildi');  
 }
 }

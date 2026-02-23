@@ -53,6 +53,7 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
+        
         return view('admin.suppliers.edit', compact('supplier'));
     }
 
