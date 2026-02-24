@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseItemController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\CategoryController;
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::resource('/category', CategoryController::class);
     Route::resource('/supplier', SupplierController::class);
     Route::resource('/purchase', PurchaseController::class );
+    Route::resource('/purchase_item', PurchaseItemController::class);
 
 });
 

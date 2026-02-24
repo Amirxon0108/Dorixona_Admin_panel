@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'purchases')
+@section('title', 'purchase_items')
 
 @section('content')
 
@@ -36,7 +36,7 @@
            Default Datatable
           </h4>
           <p class="card-title-desc">
-            <a href="{{ route('purchase.create') }}">Yangi qo'shish</a>           
+            <a href="{{ route('purchase_item.create') }}">Yangi qo'shish</a>           
           </p>
          </div>
          <div class="card-body">
@@ -71,33 +71,33 @@
             </tr>
            </thead>
            <tbody>
-            @foreach ($purchases as $purchase)
+            @foreach ($purchase_items as $purchase_item)
             <tr>
              <td>
-              {{ $purchase->supplier->name }}
+              {{ $purchase_item->supplier->name }}
              </td>
             
              <td>
-             {{ $purchase->user->name}}
+             {{ $purchase_item->user->name}}
              </td>
              <td>
-              {{ $purchase->purchase_no }}
+              {{ $purchase_item->purchase_item_no }}
              </td>
              <td>
-              {{ $purchase->purchase_date }}
+              {{ $purchase_item->purchase_item_date }}
              </td>
              <td>
-              {{ $purchase->total_amount }}
+              {{ $purchase_item->total_amount }}
              </td>
              <td>
-              {{ $purchase->description }}
+              {{ $purchase_item->description }}
              </td>
              
              <td>
-                <a href="{{ route('purchase.edit', $purchase->id) }}">edit</a> <br>
-            <a href="{{ route('purchase.show', $purchase->id) }}">ko'rish</a>
+                <a href="{{ route('purchase_item.edit', $purchase_item->id) }}">edit</a> <br>
+            <a href="{{ route('purchase_item.show', $purchase_item->id) }}">ko'rish</a>
 
-            <form action="{{ route('purchase.destroy', $purchase->id) }}"  method ="POST">
+            <form action="{{ route('purchase_item.destroy', $purchase_item->id) }}"  method ="POST">
               @csrf
               @method('DELETE').
               <input type="submit" value="ochir">

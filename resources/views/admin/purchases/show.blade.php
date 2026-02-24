@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+@section('title', 'Purchase')
 @section('content')
 <div class="container">
 
@@ -10,13 +10,7 @@
                 <div class="row">
 
     <!-- Left side (optional image yoki icon) -->
-    <div class="col-md-4 text-center">
-
-        <img src="{{ asset('assets/images/purchase.png') }}"
-             class="img-fluid rounded"
-             style="max-height:250px; object-fit:cover;">
-
-    </div>
+    
 
     <!-- Right side info -->
     <div class="col-md-8">
@@ -35,19 +29,15 @@
             {{ $purchase->purchase_date }}
         </p>
 
-        <p><strong>Jami summa:</strong> 
-            {{ number_format($purchase->total_amount, 0, '.', ' ') }} so'm
+        <p><strong>Jami pachka:</strong> 
+            {{ number_format($purchase->total_amount, 0, '.', ' ') }}
         </p>
 
         <p><strong>Description:</strong> 
             {{ $purchase->description ?? '-' }}
         </p>
 
-        <p><strong>Status:</strong>
-            <span class="badge bg-{{ $purchase->is_active ? 'success' : 'danger' }}">
-                {{ $purchase->is_active ? 'Active' : 'Inactive' }}
-            </span>
-        </p>
+        
 
         <a href="{{ route('purchase.index') }}"
            class="btn btn-light me-3">

@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('purchase_items', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('purchase_id')->constrained('purchases');
+            $table->foreignId('medicine_id')->constrained('medicines');
+            $table->integer('quantity');
+            $table->decimal('unit_price',15, 2);
+            $table->text('description')->nullable();    
+            $table->string('batch_no')->nullable();
+            $table->date('expiry_date')->nullable();
+            $table->timestamps();   
         });
     }
 

@@ -13,7 +13,7 @@
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
-                        Dashboard
+                        Ma'lumotlar
                         </span>
                         </a>
                      </li>
@@ -22,7 +22,7 @@
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
-                        Medicines
+                        Medicinalar
                         </span>
                         </a>
                      </li>
@@ -31,7 +31,7 @@
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
-                        Categories
+                        Dori Kategoriyalari
                         </span>
                         </a>
                      </li>
@@ -40,16 +40,16 @@
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
-                        Ombor
+                        Omborga tarixi
                         </span>
                         </a>
                      </li>
                       <li>
-                        <a href="index.html">
+                        <a href="{{ route('purchase_item.index') }}">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
-                        Kirim
+                        Omborga kelgan narsalar
                         </span>
                         </a>
                      </li>
@@ -63,12 +63,12 @@
                         </a>
                      </li>
                       <li>
-                        <a href="">
+                        <a href="index.html">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">
-                        Users
-                        </span> 
+                        Sotuvchilar(Users)
+                        </span>
                         </a>
                      </li>
                       <li>

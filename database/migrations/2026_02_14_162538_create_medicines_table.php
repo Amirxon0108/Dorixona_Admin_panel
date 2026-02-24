@@ -22,7 +22,7 @@ return new class extends Migration
     
     $table->string('barcode')->unique()->nullable()->index(); // Index qidiruvni tezlashtiradi
     
-    $table->decimal('buy_price', 15, 2);  // Kelish narxi
+    $table->decimal('buy_price', 15, 2); 
     $table->decimal('sell_price', 15, 2); // Sotilish narxi
     
     $table->integer('quantity')->default(0); // Ombor dagi soni
