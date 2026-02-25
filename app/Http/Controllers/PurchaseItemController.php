@@ -44,7 +44,9 @@ public function store(Request $request)
 
     // 2. Har bir dori uchun PurchaseItem yaratish va Medicine qoldig'ini yangilash
     foreach ($request->items as $item) {
+        
         // Purchase_items ga yozish
+
         $purchase->items()->create([
             'medicine_id' => $item['medicine_id'],
             'quantity'    => $item['quantity'],
