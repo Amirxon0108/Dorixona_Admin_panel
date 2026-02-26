@@ -28,15 +28,15 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Supplier $supplier)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|numeric',
+            'phone' => 'required|string|max:20',
             'address' => 'required|string|max:255'
         ]);
 
-        $supplier->create($validated);
+        Supplier::create($validated);
         return redirect()->back()->with('success', 'malumot qoshildi');
     }
 
@@ -64,7 +64,7 @@ class SupplierController extends Controller
     {
          $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|numeric',
+            'phone' => 'required|string|max:20',
             'address' => 'required|string|max:255'
         ]);
 

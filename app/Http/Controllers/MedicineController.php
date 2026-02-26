@@ -87,8 +87,8 @@ public function store(Request $request)
 
 
 
-    public function show($id){
-        $medicine = Medicine::findOrFail($id);
+    public function show(Medicine $medicine){
+       
     return view('admin.medicines.read', compact('medicine'));
     }
 

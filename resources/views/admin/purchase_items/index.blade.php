@@ -45,23 +45,27 @@
             <tr>
             
              <th>
-              Yetkazib ber
+              Purchase No
              </th>
              <th>
-             olgan
+             Medicine
              </th>
              
               <th>
-             nomer
+             Soni 
              </th>
              <th>
-             olingan sana
+            
+            Yaroqlilik muddati
              </th>
             <th>
-             jami
+             Kelgan narxi
              </th>
              <th>
              description
+             </th>
+             <th>
+             Seriya raqami
              </th>
              <th>
              Action
@@ -74,23 +78,26 @@
             @foreach ($purchase_items as $purchase_item)
             <tr>
              <td>
-              {{ $purchase_item->supplier->name }}
+              {{ $purchase_item->purchase->purchase_no ?? 'Noma\'lum' }}
              </td>
             
              <td>
-             {{ $purchase_item->user->name}}
+             {{ $purchase_item->medicine->name ?? 'Noma\'lum' }}
              </td>
              <td>
-              {{ $purchase_item->purchase_item_no }}
+              {{ $purchase_item->quantity }}
              </td>
              <td>
-              {{ $purchase_item->purchase_item_date }}
+              {{ $purchase_item->expiry_date }}
              </td>
              <td>
-              {{ $purchase_item->total_amount }}
+              {{ $purchase_item->unit_price }}
              </td>
              <td>
               {{ $purchase_item->description }}
+             </td>
+             <td>
+              {{ $purchase_item->batch_no }}
              </td>
              
              <td>

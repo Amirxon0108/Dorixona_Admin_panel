@@ -22,6 +22,7 @@
                     <h4>{{ $medicine->name }}</h4>
                     <p><strong>Generic:</strong> {{ $medicine->generic_name }}</p>
                     <p><strong>Barcode:</strong> {{ $medicine->barcode }}</p>
+                    <p><strong>cATE:</strong> {{ $medicine->category->name }}</p>
                     <p><strong>Sell Price:</strong> {{ $medicine->sell_price }} som</p>
                     <p><strong>Buy Price:</strong> {{ $medicine->buy_price }} som</p>
                     <p><strong>Quantity:</strong> {{ $medicine->quantity }}</p>
