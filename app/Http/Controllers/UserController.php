@@ -12,14 +12,25 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
+
+
     {
+       
         $users = auth()->user();
         return view('profile.index', compact('users'));
     }
 
+
+
     /**
      * Show the form for creating a new resource.
      */
+
+    public function table(){
+         $table =  User::all();
+
+         return view('admin.users.index', compact('table'));
+    }
     public function create()
     {
         //

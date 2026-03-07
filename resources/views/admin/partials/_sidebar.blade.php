@@ -63,7 +63,7 @@
                         </a>
                      </li>
                       <li>
-                        <a href="{{ route('profile.index')}}">
+                        <a href="{{ route('users.table')}}">
                         <i data-feather="home">
                         </i>
                         <span data-key="t-dashboard">

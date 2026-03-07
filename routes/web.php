@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -36,6 +37,8 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::resource('/supplier', SupplierController::class);
     Route::resource('/purchase', PurchaseController::class );
     Route::resource('/purchase_item', PurchaseItemController::class);
+    Route::get('/users/table', [UserController::class, 'table'])->name('users.table');
+    Route::resource('/users', UserController::class);
 
 });
 

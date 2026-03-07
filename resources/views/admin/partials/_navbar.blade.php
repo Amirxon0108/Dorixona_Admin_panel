@@ -321,7 +321,7 @@
                      <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
                      <img alt="Header Avatar" class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"/>
                      <span class="d-none d-xl-inline-block ms-1 fw-medium">
-                     StarCode Kh
+                     {{ Auth::user()->name }}
                      </span>
                      <i class="mdi mdi-chevron-down d-none d-xl-inline-block">
                      </i>
