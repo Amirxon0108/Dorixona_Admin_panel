@@ -5,12 +5,12 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white">
-            <h5>Edit Category</h5>
+            <h5>Edit tab</h5>
         </div>
 
         <div class="card-body">
 
-            <form action="{{ route('category.update', $category->id) }}"
+            <form action="{{ route('users.update', $tab->id) }}"
                   method="POST"
                   enctype="multipart/form-data">
                 @csrf
@@ -26,27 +26,32 @@
                             <label>Name</label>
                             <input type="text" name="name"
                                    class="form-control"
-                                   value="{{ $category->name }}">
+                                   value="{{ $tab->name }}">
                         </div>
 
                         <div class="mb-3">
-                            <label>Tarkibi</label>
-                            <input type="text" name="slug"
+                            <label>Email</label>
+                            <input type="email" name="email"
                                    class="form-control"
-                                   value="{{ $category->slug }}">
+                                   value="{{ $tab->email }}">
                         </div>
                         <div class="mb-3">
-                            <label>Tavsifi</label>
-                            <input type="text" name="parent_id" class="form-control"
-                             value="{{ old('parent_id', $category->parent_id) }}">
-                        </div>
+                        <select name="role_id" id="" class="form-control">
+                            
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id }}" {{ old('role_id', $tab->role_id) == $role->id ? 'selected' : '' }}>
+                                    {{ $role->name }}
+                                </option>
+                            @endforeach
+                        </select>
 
-                         <a href="{{ route('category.index') }}"
+                         </div>
+                         <a href="{{ route('users.table') }}"
                         class="btn btn-light me-3">
                         back
                     </a>
                         <button type="submit" class="btn btn-primary">
-                            Update Category
+                            Update tab
                         </button>
 
                     </div>

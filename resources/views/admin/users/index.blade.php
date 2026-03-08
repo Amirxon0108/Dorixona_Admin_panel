@@ -52,7 +52,7 @@
            Default Datatable
           </h4>
           <p class="card-title-desc">
-            <a href="{{ route('users.create') }}">Yangi qo'shish</a>           
+                  <a href="{{ route('users.create') }}" class="btn btn-primary">Add User</a>
           </p>
          </div>
          <div class="card-body">
@@ -88,7 +88,15 @@
               {{ $tab->role->name }}
              </td>
              
-             
+             <td>
+                <a href="{{ route('users.edit', $tab->id) }}">Tahrirlash</a>
+                <a href="{{ route('users.show', $tab->id) }}">Ko'rish</a>
+                <form action="{{ route('users.destroy', $tab) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-alert-danger">o'chirish</button>
+                </form>
+             </td>
              
              @endforeach
             </tr>

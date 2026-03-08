@@ -11,18 +11,18 @@
 
                 <div class="col-md-8">
 
-                    <h4>{{ $category->name }}</h4>
-                    <p><strong>Slug:</strong> {{ $category->slug }}</p>
+                    <h4>{{ $tab->name }}</h4>
+                    <p><strong>Email:</strong> {{ $tab->email }}</p>
                    
-                    <p><strong>Parent id:</strong> {{ $category->parent_id }}</p>
+                    <p><strong>Role</strong> {{ $tab->role->name }}</p>
                   
-                    <a href="{{ route('category.index') }}"
+                    <a href="{{ route('users.table') }}"
                         class="btn btn-light me-3">
                         back
                     </a>
-                    <a href="{{ route('category.edit', $category->id) }}"
+                    <a href="{{ route('users.edit', $tab->id) }}"
                        class="btn btn-primary mt-3">
-                        Edit category
+                        Edit tab
                     </a>
 
                 </div>

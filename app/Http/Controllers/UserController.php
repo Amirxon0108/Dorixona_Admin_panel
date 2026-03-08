@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 
 use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
@@ -33,7 +34,7 @@ class UserController extends Controller
     }
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -49,7 +50,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //  
+        $tab = User::findOrFail($id);
+        return view('admin.users.show', compact('tab'));  
     }
 
     /**
@@ -57,7 +59,9 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $roles = Role::all(); // Assuming you have a Role model
+        $tab = User::findOrFail($id);
+        return view('admin.users.edit', compact('tab', 'roles'));  
     }
 
     /**
@@ -65,14 +69,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // $validated = $request->validate([
+        //     ''
+        // ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $tab)
     {
-        //
+        $tab->delete();
+        return redirect()->route('users.table')->with('success', 'User deleted successfully.');
     }
 }
