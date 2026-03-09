@@ -19,77 +19,59 @@
                      </li>
                      <li>
                         <a href="{{ route('medicine.index') }}">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Medicinalar
-                        </span>
+                           <i data-feather="package"></i>
+                           <span data-key="t-medicines">Medicinalar</span>
                         </a>
                      </li>
-                      <li>
-                        <a href="{{ route('category.index')}}">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Dori Kategoriyalari
-                        </span>
+
+                     <li>
+                        <a href="{{ route('category.index') }}">
+                           <i data-feather="grid"></i>
+                           <span data-key="t-categories">Dori Kategoriyalari</span>
                         </a>
                      </li>
-                      <li>
-                        <a href="{{route('purchase.index')}}">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Omborga tarixi
-                        </span>
+
+                     <li>
+                        <a href="{{ route('purchase.index') }}">
+                           <i data-feather="shopping-cart"></i>
+                           <span data-key="t-purchase-history">Omborga tarixi</span>
                         </a>
                      </li>
-                      <li>
+
+                     <li>
                         <a href="{{ route('purchase_item.index') }}">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Omborga kelgan narsalar
-                        </span>
+                           <i data-feather="layers"></i>
+                           <span data-key="t-purchase-items">Omborga kelgan narsalar</span>
                         </a>
                      </li>
-                      <li>
-                        <a href="{{  route('supplier.index')}}">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Yetkazib beruvchilar
-                        </span>
+
+                     <li>
+                        <a href="{{ route('supplier.index') }}">
+                           <i data-feather="truck"></i>
+                           <span data-key="t-suppliers">Yetkazib beruvchilar</span>
                         </a>
                      </li>
-                      <li>
-                        <a href="{{ route('users.table')}}">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Sotuvchilar(Users)
-                        </span>
+
+                     <li>
+                        <a href="{{ route('users.table') }}">
+                           <i data-feather="users"></i>
+                           <span data-key="t-users">Sotuvchilar(Users)</span>
                         </a>
                      </li>
-                      <li>
-                        <a href="index.html">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Hujjatlar
-                        </span>
+
+                     <li>
+                        <a href="#">
+                           <i data-feather="file-text"></i>
+                           <span data-key="t-documents">Hujjatlar</span>
                         </a>
                      </li>
-                      <li>
-                        <a href="index.html">
-                        <i data-feather="home">
-                        </i>
-                        <span data-key="t-dashboard">
-                        Loglar
-                        </span>
+
+                     <li>
+                        <a href="#">
+                           <i data-feather="activity"></i>
+                           <span data-key="t-logs">Loglar</span>
                         </a>
                      </li>
-                      
                      
                      <li>
                         <a class="has-arrow" href="javascript: void(0);">

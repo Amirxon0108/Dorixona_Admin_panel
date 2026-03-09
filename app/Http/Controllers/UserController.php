@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
@@ -16,7 +16,7 @@ class UserController extends Controller
 
 
     {
-       
+         
         $users = auth()->user();
         return view('profile.index', compact('users'));
     }
@@ -28,13 +28,14 @@ class UserController extends Controller
      */
 
     public function table(){
-         $table =  User::all();
+         $users =  User::all();
 
-         return view('admin.users.index', compact('table'));
+         return view('admin.users.index', compact('users'));
     }
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::all();
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -42,44 +43,61 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $data = $request->validate([
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'min:8'],
+            'role_id'  => ['required', 'exists:roles,id'],
+        ]);
+        $data['password'] = bcrypt($data['password']);
+
+        User::create($data);
+
+        return to_route('users.table')->with('success', 'User Yaratildi ');
+
     }
+
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        $tab = User::findOrFail($id);
-        return view('admin.users.show', compact('tab'));  
+        
+        return view('admin.users.show', compact('user'));  
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
         $roles = Role::all(); // Assuming you have a Role model
-        $tab = User::findOrFail($id);
-        return view('admin.users.edit', compact('tab', 'roles'));  
+        return view('admin.users.edit', compact('user', 'roles'));  
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        // $validated = $request->validate([
-        //     ''
-        // ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'. $user->id,
+            'role_id' => 'required|exists:roles,id', 
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('users.table')->with('success', 'User updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $tab)
+    public function destroy(User $user)
     {
-        $tab->delete();
+        $user->delete();
         return redirect()->route('users.table')->with('success', 'User deleted successfully.');
     }
 }
