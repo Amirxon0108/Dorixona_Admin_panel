@@ -15,7 +15,7 @@ class PurchaseItemController extends Controller
     public function index()
 
     {
-        $purchase_items = PurchaseItem::all();
+        $purchase_items = PurchaseItem::latest()->paginate(10);
         return view('admin.purchase_items.index', compact('purchase_items'));
     }
 

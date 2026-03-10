@@ -13,7 +13,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::latest()->paginate(10);
         return view('admin.suppliers.index', compact('suppliers'));
     }
 
@@ -70,7 +70,7 @@ class SupplierController extends Controller
 
         $supplier->update($validated);
 
-        return redirect()->route('supplier.index')->with('success', 'yangilandi');
+        return to_route('supplier.index')->with('success', 'yangilandi');
     }
 
     /**
@@ -79,6 +79,6 @@ class SupplierController extends Controller
     public function destroy(Supplier $supplier)
     {
         $supplier->delete();
-        return redirect()->back()->with('succes', 'Malumot ochirildi');
+        return redirect()->back()->with('success', 'Malumot ochirildi');
     }
 }

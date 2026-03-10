@@ -28,4 +28,8 @@ class Medicine extends Model
     public function category(){
         return $this->belongsTo( Category::class);
     }
+
+    public function salesItems(){
+        return $this->hasMany(SalesItem::class);
+    }
 }

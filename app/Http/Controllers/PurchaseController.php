@@ -11,7 +11,7 @@ class PurchaseController extends Controller
 {
 
 public function index(){
-    $purchases = Purchase::all();
+    $purchases = Purchase::latest()->paginate(10);
     return view('admin.purchases.index', compact('purchases'));
 }
 

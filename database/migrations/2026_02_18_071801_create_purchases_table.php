@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('purchase_no')->unique(); 
             $table->date('purchase_date');
             $table->decimal('total_amount', 15, 2);
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->enum('payment_method', ['cash','card','transfer'])->default('cash');
             $table->text('description')->nullable();
             $table->timestamps();
         });
