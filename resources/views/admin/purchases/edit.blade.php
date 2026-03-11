@@ -40,6 +40,27 @@
                         @error('user_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
+                     <div class="col-md-6 mb-3">
+                        <label class="form-label">To'lov Turi *</label>
+                        <select name="payment_method" class="form-select @error('payment_method') is-invalid @enderror" required>
+                            <option value="">Tanlang...</option>
+                            <option value="cash" {{ old('payment_method', $purchase->payment_method) == 'cash' ? 'selected' : '' }}>Naqd pul</option>
+                            <option value="card" {{ old('payment_method',$purchase->payment_method) == 'card' ? 'selected' : '' }}>Plastik karta</option>
+                            <option value="transfer" {{ old('payment_method',$purchase->payment_method) == 'transfer' ? 'selected' : '' }}>O'tkazma</option>
+                        </select>
+                        @error('payment_method') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">To'lov Holati *</label>
+                        <select name="status" class="form-select @error('status') is-invalid @enderror" required>
+                            <option value="">Tanlang...</option>
+                            <option value="completed" {{ old('status',$purchase->status) == 'completed' ? 'selected' : '' }}>To'langan</option>
+                            <option value="pending" {{ old('status',$purchase->status) == 'pending' ? 'selected' : '' }}>Qarz</option>
+                            <option value="cancelled" {{ old('status',$purchase->status) == 'cancelled' ? 'selected' : '' }}>Bekor qilindi</option>
+                        </select>
+                        @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Kod (Nomer)</label>
                         <input type="text" name="purchase_no" value="{{ old('purchase_no', $purchase->purchase_no) }}" class="form-control @error('purchase_no') is-invalid @enderror">

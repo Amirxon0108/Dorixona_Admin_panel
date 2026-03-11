@@ -19,15 +19,18 @@ public function index(){
 
 
 public function create(){
+    $purchases= Purchase::all();
     $suppliers = Supplier::all();
     $users =User::all();
-return view('admin.purchases.create', compact('suppliers', 'users'));
+return view('admin.purchases.create', compact('suppliers', 'users','purchases'));
 }
 
 public function store(Request $request){
     $validated = $request->validate([
-        'supplier_id'    => 'required|exists:suppliers,id',
+        'supplier_id'   => 'required|exists:suppliers,id',
         'user_id'       => 'required|exists:users,id',
+        'payment_method'=> 'required|in:cash,card,transfer',
+        'status'        => 'required|in:completed,pending,cancelled',
         'purchase_no'   => 'required|string',
         'purchase_date' => 'required|date',
         'total_amount'  => 'required|numeric',

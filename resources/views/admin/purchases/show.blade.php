@@ -25,6 +25,28 @@
                             <span>{{ $purchase->purchase_date }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>To'lov Turi:</strong>
+                            <span>@if($purchase->payment_method == 'cash')
+                                <span class="badge bg-success">Naqd pul</span>
+                            @elseif($purchase->payment_method == 'card')
+                                <span class="badge bg-success">Plastik karta</span>
+                            @elseif($purchase->payment_method == 'transfer')
+                                <span class="badge bg-success">O'tkazma</span>
+                            @endif
+                        </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <strong>To'lov Holati:</strong>
+                            <span>@if($purchase->status == 'completed')
+                                <span class="badge bg-success">To'langan</span>
+                            @elseif($purchase->status == 'pending')
+                                <span class="badge bg-warning">Qarz</span>
+                            @elseif($purchase->status == 'cancelled')
+                                <span class="badge bg-danger">Bekor qilindi</span>
+                            @endif
+                        </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
                             <strong>Jami summa:</strong>
                             <span class="badge bg-success rounded-pill">{{ number_format($purchase->total_amount, 0, '.', ' ') }} so'm</span>
                         </li>

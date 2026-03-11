@@ -23,6 +23,8 @@
                             <tr>
                                 <th>Yetkazib beruvchi</th>
                                 <th>Qabul qilib oluvchi</th>
+                                <th>To'lov Turi</th>
+                                <th>To'lov Holati</th>
                                 <th>Nomer</th>
                                 <th>Sana</th>
                                 <th>Jami</th>
@@ -35,9 +37,23 @@
                             <tr>
                                 <td>{{ $purchase->supplier->name ?? 'Noma\'lum' }}</td>
                                 <td>{{ $purchase->user->name ?? 'Noma\'lum' }}</td>
+                                <td>@if($purchase->payment_method == 'cash')<span class="badge bg-success">Naqd pul</span>
+                                 @elseif($purchase->payment_method == 'card')<span class="badge bg-success">Plastik karta</span> 
+                                 @elseif($purchase->payment_method == 'transfer') <span class="badge bg-success">O'tkazma</span> 
+                                 @endif
+                                </td>
+                                <td>
+                                    @if($purchase->status == 'completed')
+                                        <span class="badge bg-success">To'langan</span>
+                                    @elseif($purchase->status == 'pending')
+                                        <span class="badge bg-warning">Qarz</span>
+                                    @else
+                                        <span class="badge bg-danger">Bekor qilindi</span>
+                                    @endif
+                                </td>
                                 <td>{{ $purchase->purchase_no }}</td>
                                 <td>{{ $purchase->purchase_date }}</td>
-                                <td>{{ number_format($purchase->total_amount, 2) }}</td>
+                                <td>{{ number_format($purchase->total_amount, 2) }} so'm</td>
                                 <td>{{ $purchase->description }}</td>
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-2">
