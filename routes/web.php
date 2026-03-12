@@ -8,7 +8,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::resource('/purchase_item', PurchaseItemController::class);
     Route::get('/users/table', [UserController::class, 'table'])->name('users.table');
     Route::resource('/users', UserController::class);
-
+    Route::resource('/sale', SalesController::class);
+ 
 });
 
 

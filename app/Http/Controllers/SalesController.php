@@ -1,64 +1,88 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Models\Sale;
+use App\Models\SalesItem;
+use App\Models\Medicine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $sales = Sale::latest()->paginate(10);
+        return view('admin.sales.index', compact('sales'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $medicines = Medicine::where('quantity','>',0)->get();
+        return view('admin.sales.create', compact('medicines'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'medicines' => 'required|array',
+            'medicines.*.id' => 'required|exists:medicines,id',
+            'medicines.*.quantity' => 'required|integer|min:1',
+            'payment_method' => 'required|string',
+            'discount' => 'nullable|numeric|min:0',
+            'note' => 'nullable|string|max:255',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        try {
+            DB::beginTransaction();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+            $invoice = 'INV-' . time();
+            $subTotal = 0;
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+            $sale = Sale::create([
+                'user_id' => auth()->id(),
+                'invoice_number' => $invoice,
+                'sub_total' => 0,
+                'discount' => $data['discount'] ?? 0,
+                'total_amount' => 0,
+                'payment_method' => $data['payment_method'],
+                'status' => 'paid',
+                'note' => $data['note'] ?? null,
+            ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            foreach ($data['medicines'] as $item) {
+                $medicine = Medicine::lockForUpdate()->findOrFail($item['id']);
+                if ($medicine->quantity < $item['quantity']) {
+                    throw new \Exception($medicine->name.' yetarli emas!');
+                }
+
+                $medicine->decrement('quantity', $item['quantity']);
+                $price = $medicine->sell_price;
+
+                SalesItem::create([
+                    'sale_id' => $sale->id,
+                    'medicine_id' => $medicine->id,
+                    'quantity' => $item['quantity'],
+                    'price' => $price,
+                    'unit_price' => $price,
+                    'total_price' => $price * $item['quantity'],
+                ]);
+
+                $subTotal += $price * $item['quantity'];
+            }
+
+            $sale->update([
+                'sub_total' => $subTotal,
+                'total_amount' => $subTotal - ($data['discount'] ?? 0)
+            ]);
+
+            DB::commit();
+
+            return redirect()->route(   'sale.index')->with('success','Savdo muvaffaqiyatli yakunlandi!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error',$e->getMessage());
+        }
     }
 }

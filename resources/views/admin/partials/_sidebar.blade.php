@@ -23,6 +23,12 @@
                            <span data-key="t-medicines">Medicinalar</span>
                         </a>
                      </li>
+                     <li>
+                        <a href="{{ route('sale.index') }}">
+                           <i data-feather="package"></i>
+                           <span data-key="t-medicines">Sale</span>
+                        </a>
+                     </li>
 
                      <li>
                         <a href="{{ route('category.index') }}">
