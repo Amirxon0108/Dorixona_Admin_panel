@@ -38,9 +38,10 @@
             <td>{{ number_format($sale->total_amount,2) }}</td>
             <td>{{ $sale->payment_method }}</td>
             <td>{{ $sale->status }}</td>
-            <td>{{ $sale->created_at->format('d/m/Y H:i') }}</td>
+            <td>{{ $sale->created_at->format('d.                                                                                                                                                                                                                                      m.Y H:i') }}</td>
             <td>
-                <a href="" class="btn btn-sm btn-info">Ko‘rish</a>
+                <a href="{{ route('sale.show', $sale->id) }}" class="btn btn-sm btn-info">Ko‘rish</a>
+                <a href="{{ route('sale.destroy', $sale->id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">O‘chirish  </a>
             </td>
         </tr>
         @endforeach

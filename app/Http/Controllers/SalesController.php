@@ -50,26 +50,27 @@ class SalesController extends Controller
                 'note' => $data['note'] ?? null,
             ]);
 
-            foreach ($data['medicines'] as $item) {
-                $medicine = Medicine::lockForUpdate()->findOrFail($item['id']);
-                if ($medicine->quantity < $item['quantity']) {
-                    throw new \Exception($medicine->name.' yetarli emas!');
-                }
-
-                $medicine->decrement('quantity', $item['quantity']);
-                $price = $medicine->sell_price;
-
-                SalesItem::create([
-                    'sale_id' => $sale->id,
-                    'medicine_id' => $medicine->id,
-                    'quantity' => $item['quantity'],
-                    'price' => $price,
-                    'unit_price' => $price,
-                    'total_price' => $price * $item['quantity'],
-                ]);
-
-                $subTotal += $price * $item['quantity'];
+                foreach ($data['medicines'] as $item) {
+            $medicine = Medicine::lockForUpdate()->findOrFail($item['id']);
+            if ($medicine->quantity < $item['quantity']) {
+                throw new \Exception($medicine->name.' yetarli emas!');
             }
+
+            $medicine->decrement('quantity', $item['quantity']);
+            $unitPrice = $medicine->sell_price;
+            $quantity = $item['quantity'];
+            $total = $unitPrice * $quantity;
+
+            SalesItem::create([
+                'sale_id' => $sale->id,
+                'medicine_id' => $medicine->id,
+                'quantity' => $quantity,
+                'unit_price' => $unitPrice,
+                'total_price' => $total
+            ]);
+
+            $subTotal += $total;
+        }   
 
             $sale->update([
                 'sub_total' => $subTotal,
@@ -85,4 +86,22 @@ class SalesController extends Controller
             return back()->with('error',$e->getMessage());
         }
     }
-}
+
+    public function show($id){
+    $sale = Sale::with(['items.medicine','user'])->findOrFail($id);
+        return view('admin.sales.show', compact('sale'));
+    }
+
+    public function destroy($id){
+        $sale = Sale::findOrFail($id);
+        foreach ($sale->items as $item) {
+            $medicine = Medicine::find($item->medicine_id);
+            if ($medicine) {
+                $medicine->increment('quantity', $item->quantity);
+            }
+        }
+        $sale->delete();
+        return redirect()->route('sale.index')->with('success','Savdo muvaffaqiyatli o\'chirildi!');
+
+    }
+}   
