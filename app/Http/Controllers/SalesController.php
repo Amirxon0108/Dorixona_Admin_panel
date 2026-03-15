@@ -7,6 +7,8 @@ use App\Models\SalesItem;
 use App\Models\Medicine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class SalesController extends Controller
 {
@@ -16,7 +18,7 @@ class SalesController extends Controller
         return view('admin.sales.index', compact('sales'));
     }
 
-    public function create()
+    public function create()        
     {
         $medicines = Medicine::where('quantity','>',0)->get();
         return view('admin.sales.create', compact('medicines'));
@@ -91,6 +93,19 @@ class SalesController extends Controller
     $sale = Sale::with(['items.medicine','user'])->findOrFail($id);
         return view('admin.sales.show', compact('sale'));
     }
+
+    public function downloadPdf($id){
+        $sale = Sale::with(['user', 'items.medicine.category'])->findOrFail($id);
+        $qr = base64_encode(
+    QrCode::format('png')->size(200)->generate(
+        "Invoice: ".$sale->invoice_number
+    )
+);
+        $pdf = Pdf::loadView('admin.sales.invoice_pdf', compact('sale','qr'));
+        return $pdf->download('invoice-'. $sale->invoice_number . '.pdf');
+     }
+
+     
 
     public function destroy($id){
         $sale = Sale::findOrFail($id);

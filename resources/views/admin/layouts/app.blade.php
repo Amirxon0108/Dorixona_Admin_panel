@@ -21,6 +21,7 @@
       <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css"/>
       <!-- App Css-->
       <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css"/>
+      <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
       </link>
       </meta>
    </head>
@@ -218,6 +219,8 @@
       <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
       <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
       <!-- pace js -->
+       
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
       <script src="{{ asset('assets/libs/pace-js/pace.min.js') }}"></script>
       <!-- apexcharts -->
       <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>

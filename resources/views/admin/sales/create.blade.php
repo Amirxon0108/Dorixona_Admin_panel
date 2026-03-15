@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
+
 <h1>New Sale</h1>
 
 @if(session('error'))
@@ -9,12 +10,16 @@
 
 <form method="POST" action="{{ route('sale.store') }}">
 @csrf
+<input aria-describedby="date1" class="form-control flatpickr-input" data-input="" type="text"/>
 
+
+
+</select>
 <!-- Product selection -->
 <div class="mb-3">
     <label for="medicine-select">Select Medicine</label>
     <div class="input-group">
-        <select id="medicine-select" class="form-control">
+       <select id="medicine-select" class="form-control medicine-search">
             <option value="">-- Select Medicine --</option>
             @foreach($medicines as $medicine)
                 <option value="{{ $medicine->id }}" data-price="{{ $medicine->sell_price }}" data-quantity="{{ $medicine->quantity }}">
@@ -96,6 +101,14 @@ document.getElementById('add-to-cart').addEventListener('click', function() {
 
     updateCart();
 });
+$(document).ready(function(){
+
+    $('.medicine-search').select2({
+        placeholder: "Dori qidirish...",
+        allowClear: true
+    });
+
+});
 
 // Remove from cart
 function removeFromCart(index){
@@ -129,5 +142,13 @@ function updateCart(){
     document.getElementById('total').innerText = total.toFixed(2);
 }
 </script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endsection

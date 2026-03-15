@@ -129,12 +129,12 @@
                               </a>
                               <ul aria-expanded="false" class="sub-menu">
                                  <li>
-                                    <a data-key="t-invoice-list" href="apps-invoices-list.html">
+                                    <a data-key="t-invoice-list" href="apps-invoices-list.blade.php">
                                     Invoice List
                                     </a>
                                  </li>
                                  <li>
-                                    <a data-key="t-invoice-detail" href="apps-invoices-detail.html">
+                                    <a data-key="t-invoice-detail" href="admin/apps-invoices-detail.blade.php">
                                     Invoice Detail
                                     </a>
                                  </li>
