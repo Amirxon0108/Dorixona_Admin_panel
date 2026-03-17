@@ -96,12 +96,8 @@ class SalesController extends Controller
 
     public function downloadPdf($id){
         $sale = Sale::with(['user', 'items.medicine.category'])->findOrFail($id);
-        $qr = base64_encode(
-    QrCode::format('png')->size(200)->generate(
-        "Invoice: ".$sale->invoice_number
-    )
-);
-        $pdf = Pdf::loadView('admin.sales.invoice_pdf', compact('sale','qr'));
+      
+        $pdf = Pdf::loadView('admin.sales.invoice_pdf', compact('sale'));
         return $pdf->download('invoice-'. $sale->invoice_number . '.pdf');
      }
 

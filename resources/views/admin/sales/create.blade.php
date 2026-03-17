@@ -5,150 +5,265 @@
 <h1>New Sale</h1>
 
 @if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
+<div class="alert alert-danger">{{ session('error') }}</div>
 @endif
 
 <form method="POST" action="{{ route('sale.store') }}">
 @csrf
-<input aria-describedby="date1" class="form-control flatpickr-input" data-input="" type="text"/>
 
-
-
-</select>
-<!-- Product selection -->
+<!-- 🔍 SEARCH -->
 <div class="mb-3">
-    <label for="medicine-select">Select Medicine</label>
-    <div class="input-group">
-       <select id="medicine-select" class="form-control medicine-search">
-            <option value="">-- Select Medicine --</option>
-            @foreach($medicines as $medicine)
-                <option value="{{ $medicine->id }}" data-price="{{ $medicine->sell_price }}" data-quantity="{{ $medicine->quantity }}">
-                    {{ $medicine->name }} ({{ $medicine->quantity }} in stock)
-                </option>
-            @endforeach
-        </select>
-        <input type="number" id="medicine-qty" class="form-control" value="1" min="1" style="width: 100px;">
-        <button type="button" class="btn btn-success" id="add-to-cart">Add</button>
-    </div>
+    <input type="text" id="search" class="form-control" placeholder="Dori qidirish..." autofocus>
 </div>
 
-<!-- Cart table -->
-<table class="table table-bordered" id="cart-table">
-    <thead>
-        <tr>
-            <th>Medicine</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Subtotal</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="cart-table-body">
-        <!-- Dynamic rows will be added here -->
-    </tbody>
+<ul id="results" class="list-group mb-3"></ul>
+
+<!-- 🛒 CART -->
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>Medicine</th>
+<th>Price</th>
+<th>Qty</th>
+<th>Subtotal</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody id="cart-table-body"></tbody>
 </table>
 
 <h4>Total: <span id="total">0.00</span></h4>
 
-<!-- Discount and payment -->
-<div class="mb-3">
-    <label>Discount</label>
-    <input type="number" name="discount" class="form-control" value="0" min="0">
-</div>
+<!-- Discount -->
+ <label for="discount">Discount</label>
+<input type="number"  name="discount" class="form-control mt-2" value="0">
 
-<div class="mb-3">
-    <label>Payment Method</label>
-    <select name="payment_method" class="form-control">
-        <option value="cash">Cash</option>
-        <option value="card">Card</option>
-        <option value="transfer">Transfer</option>
-    </select>
-</div>
+<!-- Payment -->
+ <label for="payment_method">Payment Method</label> 
+<select name="payment_method" class="form-control mt-2">
+<option value="cash">Cash</option>
+<option value="card">Card</option>
+</select>
 
-<div class="mb-3">
-    <label>Note</label>
-    <textarea name="note" class="form-control"></textarea>
-</div>
+<button class="btn btn-primary mt-3">Complete Sale</button>
 
-<button type="submit" class="btn btn-primary mt-3">Complete Sale</button>
 </form>
 
-<!-- JS for dynamic cart -->
 <script>
+
+let medicines = @json($medicines);
 let cart = [];
+let selectedIndex = -1;
 
-// Add medicine to cart
-document.getElementById('add-to-cart').addEventListener('click', function() {
-    const select = document.getElementById('medicine-select');
-    const qtyInput = document.getElementById('medicine-qty');
-    const id = select.value;
-    const name = select.options[select.selectedIndex]?.text;
-    const price = parseFloat(select.options[select.selectedIndex]?.dataset.price || 0);
-    const stock = parseInt(select.options[select.selectedIndex]?.dataset.quantity || 0);
-    const quantity = parseInt(qtyInput.value);
+// 🔍 SEARCH
+document.getElementById('search').addEventListener('input', function(){
 
-    if(!id) return alert('Please select a medicine');
-    if(quantity < 1) return alert('Quantity must be at least 1');
-    if(quantity > stock) return alert('Quantity exceeds stock');
+    let keyword = this.value.toLowerCase();
 
-    // Check if already in cart
-    let existing = cart.find(item => item.id == id);
+    let filtered = medicines.filter(m =>
+        m.name.toLowerCase().includes(keyword)
+    );
+
+    let html = '';
+
+    filtered.slice(0,10).forEach((m,index)=>{
+
+        html += `
+        <li class="list-group-item item"
+            data-id="${m.id}"
+            data-name="${m.name}"
+            data-price="${m.sell_price}"
+            data-stock="${m.quantity}">
+            
+            ${m.name} (${m.quantity} dona)
+        </li>
+        `;
+    });
+
+    document.getElementById('results').innerHTML = html;
+    selectedIndex = -1;
+
+});
+
+// ⬇⬆ ENTER
+document.getElementById('search').addEventListener('keydown', function(e){
+
+    let items = document.querySelectorAll('.item');
+
+    if(e.key === "ArrowDown"){
+        selectedIndex++;
+        if(selectedIndex >= items.length) selectedIndex = 0;
+    }
+
+    if(e.key === "ArrowUp"){
+        selectedIndex--;
+        if(selectedIndex < 0) selectedIndex = items.length - 1;
+    }
+
+    items.forEach((el,i)=>{
+        el.classList.remove('active');
+        if(i === selectedIndex){
+            el.classList.add('active');
+        }
+    });
+
+    if(e.key === "Enter" && items[selectedIndex]){
+
+        let m = items[selectedIndex];
+
+        addToCart(
+            m.dataset.id,
+            m.dataset.name,
+            m.dataset.price,
+            m.dataset.stock
+        );
+
+        this.value = '';
+        document.getElementById('results').innerHTML = '';
+        selectedIndex = -1;
+    }
+
+});
+
+// CLICK
+document.addEventListener('click', function(e){
+
+    if(e.target.classList.contains('item')){
+        addToCart(
+            e.target.dataset.id,
+            e.target.dataset.name,
+            e.target.dataset.price,
+            e.target.dataset.stock
+        );
+    }
+
+});
+
+// ADD TO CART
+function addToCart(id,name,price,stock){
+
+    let existing = cart.find(i => i.id == id);
+
     if(existing){
-        existing.quantity += quantity;
+
+        if(existing.quantity + 1 > stock){
+            alert("Omborda yetarli emas!");
+            return;
+        }
+
+        existing.quantity += 1;
+
     } else {
-        cart.push({id, name, price, quantity});
+
+        cart.push({
+            id,
+            name,
+            price: parseFloat(price),
+            quantity: 1,
+            stock: parseInt(stock)
+        });
+
     }
 
     updateCart();
-});
-$(document).ready(function(){
+}
 
-    $('.medicine-search').select2({
-        placeholder: "Dori qidirish...",
-        allowClear: true
-    });
-
-});
-
-// Remove from cart
+// REMOVE
 function removeFromCart(index){
     cart.splice(index,1);
     updateCart();
 }
 
-// Update cart table and total
+// CHANGE QTY (+ -)
+function changeQty(index, change){
+
+    let item = cart[index];
+
+    let newQty = item.quantity + change;
+
+    if(newQty < 1) newQty = 1;
+
+    if(newQty > item.stock){
+        alert("Omborda yetarli emas!");
+        return;
+    }
+
+    item.quantity = newQty;
+
+    updateCart();
+}
+
+// MANUAL INPUT
+function manualQty(index, value){
+
+    let item = cart[index];
+
+    let qty = parseInt(value);
+
+    if(isNaN(qty) || qty < 1) qty = 1;
+
+    if(qty > item.stock){
+        alert("Omborda yetarli emas!");
+        qty = item.stock;
+    }
+
+    item.quantity = qty;
+
+    updateCart();
+}
+
+// UPDATE CART UI
 function updateCart(){
-    const tbody = document.getElementById('cart-table-body');
-    tbody.innerHTML = '';
+
+    let tbody = document.getElementById('cart-table-body');
+    tbody.innerHTML = "";
+
     let total = 0;
 
     cart.forEach((item,index)=>{
-        const subtotal = item.price * item.quantity;
+
+        let subtotal = item.price * item.quantity;
         total += subtotal;
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${item.name}</td>
-            <td>${item.price.toFixed(2)}</td>
-            <td>${item.quantity}</td>
-            <td>${subtotal.toFixed(2)}</td>
-            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeFromCart(${index})">Remove</button></td>
-            <input type="hidden" name="medicines[${index}][id]" value="${item.id}">
-            <input type="hidden" name="medicines[${index}][quantity]" value="${item.quantity}">
-        `;
-        tbody.appendChild(tr);
+        tbody.innerHTML += `
+<tr>
+<td>${item.name}</td>
+
+<td>${item.price}</td>
+
+<td style="width:160px">
+<div class="d-flex">
+
+<button type="button" onclick="changeQty(${index}, -1)" class="btn btn-sm btn-danger">-</button>
+
+<input type="number" 
+value="${item.quantity}" 
+min="1"
+onchange="manualQty(${index}, this.value)"
+class="form-control text-center mx-1">
+
+<button type="button" onclick="changeQty(${index}, 1)" class="btn btn-sm btn-success">+</button>
+
+</div>
+</td>
+
+<td>${subtotal.toFixed(2)}</td>
+
+<td>
+<button onclick="removeFromCart(${index})" class="btn btn-danger btn-sm">X</button>
+</td>
+
+<input type="hidden" name="medicines[${index}][id]" value="${item.id}">
+<input type="hidden" name="medicines[${index}][quantity]" value="${item.quantity}">
+
+</tr>
+`;
     });
 
     document.getElementById('total').innerText = total.toFixed(2);
 }
+
 </script>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Select2 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-<!-- Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endsection
