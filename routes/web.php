@@ -9,7 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
-
+use App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,10 +28,9 @@ use App\Http\Controllers\SalesController;
 
 
 Route::middleware(['auth', 'verified'])->group(function (){
-    Route::get('/', function (){
-        return view('admin.index');
+    Route::get('/', [HomeController::class, 'index']);
 
-    });
+    
     Route::resource('/medicine',  MedicineController::class );
     Route::resource('/category', CategoryController::class);
     Route::resource('/supplier', SupplierController::class);

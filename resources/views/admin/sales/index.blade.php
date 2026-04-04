@@ -144,7 +144,7 @@
 </td>
 
 <td>
-{{ number_format($sale->total_amount,2) }}
+{{ number_format($sale->total_amount + $sale->total_amount/100*12) }}
 </td>
 
 <td>
