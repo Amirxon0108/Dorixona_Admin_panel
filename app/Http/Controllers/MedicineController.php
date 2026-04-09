@@ -52,7 +52,7 @@ public function store(Request $request)
 
 
     public function edit(Medicine $medicine){
-        $categories =Category::all();
+        $categories = Category::all();
    
     return view('admin.medicines.edit', compact('medicine', 'categories'));
 

@@ -185,6 +185,7 @@
 </tbody>
            </table>
           </div>
+          {{ $sales->links() }}
           <!-- end table responsive -->
          </div>
          <!-- end card body -->

@@ -34,6 +34,7 @@
 </table>
 
 <h4>Total: <span id="total">0.00</span></h4>
+<h4>Total qqs: <span id="total"></span></h4>
 
 <!-- Discount -->
  <label for="discount">Discount</label>

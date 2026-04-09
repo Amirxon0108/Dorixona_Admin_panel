@@ -9,17 +9,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Gate;
+use  Illuminate\Http\RedirectResponse;
+
 
 class SalesController extends Controller
 {
     public function index()
     {
+        Gate::authorize('isAdmin');
+         $sales = Sale::latest()->paginate(10);
         $sales = Sale::latest()->paginate(10);
         return view('admin.sales.index', compact('sales'));
     }
 
     public function create()        
     {
+       
         $medicines = Medicine::where('quantity','>',0)->get();
         return view('admin.sales.create', compact('medicines'));
     }
@@ -60,6 +66,7 @@ class SalesController extends Controller
 
             $medicine->decrement('quantity', $item['quantity']);
             $unitPrice = $medicine->sell_price;
+            $buyPrice = $medicine->buy_price;
             $quantity = $item['quantity'];
             $total = $unitPrice * $quantity;
 
@@ -103,7 +110,8 @@ class SalesController extends Controller
 
      
 
-    public function destroy($id){
+    public function destroy($id):RedirectResponse
+    {
         $sale = Sale::findOrFail($id);
         foreach ($sale->items as $item) {
             $medicine = Medicine::find($item->medicine_id);
