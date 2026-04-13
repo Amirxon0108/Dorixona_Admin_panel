@@ -5,7 +5,7 @@ use App\Http\Requests\UserStoreRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
-
+use Illuminate\Support\Facades\Gate;    
 use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
@@ -13,14 +13,11 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-
-
     {
-         
+         Gate::authorize("isAdmin");
         $users = auth()->user();
         return view('profile.index', compact('users'));
     }
-
 
 
     /**
@@ -97,6 +94,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        Gate::authorize('isAdmin');
         $user->delete();
         return redirect()->route('users.table')->with('success', 'User deleted successfully.');
     }

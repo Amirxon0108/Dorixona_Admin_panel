@@ -71,7 +71,7 @@
                         </a>
                      </li>
 @endcan
-                     @cannot('isVisitor')
+                     @can('isAdmin')
                      <li>
                         <a href="{{ route('users.table') }}">
                            <i data-feather="users"></i>
@@ -79,7 +79,7 @@
                         </a>
                      </li>
 @endcan
-                     @cannot('isVisitor')
+                     @can('isAdmin')
                      <li>
                         <a href="#">
                            <i data-feather="file-text"></i>
@@ -87,7 +87,7 @@
                         </a>
                      </li>
 @endcan
-                     @cannot('isVisitor')
+                     @can('isAdmin')
                      <li>
                         <a href="#">
                            <i data-feather="activity"></i>

@@ -10,6 +10,8 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\HomeController;
+use Illuminate\Supprot\Facades\Gate;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,13 +37,15 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::resource('/category', CategoryController::class);
     Route::resource('/supplier', SupplierController::class);
     Route::resource('/purchase', PurchaseController::class );
-    Route::resource('/purchase_item', PurchaseItemController::class);
-    Route::get('/users/table', [UserController::class, 'table'])->name('users.table');
-    Route::resource('/users', UserController::class);
     Route::resource('/sale', SalesController::class);
     Route::get('sale/{sale}/invoice-pdf', [SalesController::class, 'downloadPdf'])->name('sale.print');
     
- 
+    Route::resource('/purchase_item', PurchaseItemController::class);
+    Route::get('/users/table', [UserController::class, 'table'])->middleware(['can:isAdmin'])->name('users.table');
+    Route::middleware(['auth', 'can:isAdmin'])->group(function () {
+    Route::resource('/users', UserController::class);
+});
+    
 });
 
 

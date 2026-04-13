@@ -172,9 +172,11 @@
 <li>
 <a class="dropdown-item" href="{{ route('sale.print', $sale->id) }}">Print</a>
 </li>
+@can("isAdmin")
 <li>
 <a class="dropdown-item" href="{{ route('sale.destroy', $sale->id) }}" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $sale->id }}').submit();">Delete</a>
 </li>
+@endcan()
 </ul>
 
 </div>

@@ -43,12 +43,13 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="{{ route('purchase_item.show', $purchase_item->id) }}" class="btn btn-sm btn-info text-white">Ko'rish</a>
                                         <a href="{{ route('purchase_item.edit', $purchase_item->id) }}" class="btn btn-sm btn-warning text-white">Edit</a>
-                                        
+                                        @can("isAdmin")
                                         <form action="{{ route('purchase_item.destroy', $purchase_item->id) }}" method="POST" onsubmit="return confirm('O\'chirmoqchimisiz?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">O'chirish</button>
                                         </form>
+                                        @endcan()
                                     </div>
                                 </td>
                             </tr>

@@ -8,8 +8,9 @@ use App\Models\Medicine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Gate;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 use  Illuminate\Http\RedirectResponse;
 
 
@@ -17,7 +18,7 @@ class SalesController extends Controller
 {
     public function index()
     {
-        Gate::authorize('isAdmin');
+        
          $sales = Sale::latest()->paginate(10);
         $sales = Sale::latest()->paginate(10);
         return view('admin.sales.index', compact('sales'));
@@ -112,6 +113,7 @@ class SalesController extends Controller
 
     public function destroy($id):RedirectResponse
     {
+        Gate::authorize('isAdmin');
         $sale = Sale::findOrFail($id);
         foreach ($sale->items as $item) {
             $medicine = Medicine::find($item->medicine_id);

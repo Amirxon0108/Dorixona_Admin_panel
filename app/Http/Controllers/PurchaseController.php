@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Purchase;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PurchaseController extends Controller
 {
@@ -73,6 +74,7 @@ return redirect()->route('purchase.index')->with('success', 'Malumot yangilandi 
 
 
 public function destroy(Purchase $purchase){
+    Gate::authorize('isAdmin');
  $purchase->delete();
  return redirect()->route('purchase.index')->with('success', 'Malumot ochirildi');  
 }

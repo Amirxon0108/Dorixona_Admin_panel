@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -53,7 +54,7 @@ class CategoryController extends Controller
 
 
      public function destroy(Category $category){
-    
+    Gate::authorize('isAdmin');
     $category->delete();
     return redirect()->route('category.index')->with('success', 'Malumot ochirildi');
     }

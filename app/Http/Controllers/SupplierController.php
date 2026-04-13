@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 
 class SupplierController extends Controller
@@ -78,6 +79,7 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
+        Gate::authorize('isAdmin');
         $supplier->delete();
         return redirect()->back()->with('success', 'Malumot ochirildi');
     }

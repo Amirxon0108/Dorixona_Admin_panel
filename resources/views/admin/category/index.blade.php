@@ -40,12 +40,13 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="{{ route('category.show', $category->id) }}" class="btn btn-sm btn-info text-white">Ko'rish</a>
                                         <a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-warning text-white">Edit</a>
-                                        
+                                        @can("isAdmin")
                                         <form action="{{ route('category.destroy', $category->id) }}" method="POST" onsubmit="return confirm('O\'chirmoqchimisiz?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">O'chirish</button>
                                         </form>
+                                        @endcan()
                                     </div>
                                 </td>
                             </tr>

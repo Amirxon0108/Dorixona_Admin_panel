@@ -37,12 +37,13 @@
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="{{ route('supplier.show', $supplier->id) }}" class="btn btn-sm btn-info text-white">Ko'rish</a>
                                         <a href="{{ route('supplier.edit', $supplier->id) }}" class="btn btn-sm btn-warning text-white">Tahrir</a>
-                                        
+                                        @can("isAdmin")
                                         <form action="{{ route('supplier.destroy', $supplier->id) }}" method="POST" onsubmit="return confirm('Rostdan ham o\'chirmoqchimisiz?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">O'chirish</button>
                                         </form>
+                                        @endcan()
                                     </div>
                                 </td>
                             </tr>

@@ -33,16 +33,8 @@
                         @error('supplier_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Qaul qiluvchi *</label>
-                        <select name="user_id" class="form-select @error('user_id') is-invalid @enderror" required>
-                            <option value="">Tanlang...</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                    {{ $user->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('user_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <label class="form-label">Qaul qiluvchi *</label> <br>
+                        {{ Auth::user()->name }}
                     </div>
                  
                     
@@ -75,9 +67,8 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Olingan sana</label>
-                        <input type="date" name="purchase_date" class="form-control @error('purchase_date') is-invalid @enderror" value="{{ old('purchase_date') }}">
-                        @error('purchase_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <label class="form-label">Olingan sana</label> <br>
+                       {{ Carbon\Carbon::now()->format('Y-m-d') }}
                     </div>
 
                     <div class="col-md-6 mb-3">

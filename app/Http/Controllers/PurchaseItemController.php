@@ -6,6 +6,7 @@ use App\Models\PurchaseItem;
 use App\Models\Purchase;
 use App\Models\Medicine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 
 class PurchaseItemController extends Controller
@@ -35,6 +36,7 @@ class PurchaseItemController extends Controller
             'medicine_id' => 'required|exists:medicines,id',
             'quantity' => 'required|integer|min:1',
             'unit_price' => 'required|numeric|min:0',
+            'sell_price' => 'required|numeric|min:0',
             'expiry_date' => 'nullable|date',
             'description' => 'nullable|string|max:255',
             'batch_no' => 'nullable|string|max:100',
@@ -49,6 +51,7 @@ class PurchaseItemController extends Controller
             $medicine = Medicine::lockForUpdate()->findOrFail($validated['medicine_id']);
 
             $medicine->update([
+                'sell_price' => $validated['sell_price'],
                 'buy_price' => $validated['unit_price'],
                 'expiry_date' => $validated['expiry_date'],
                 'barcode' => $validated['batch_no'],
@@ -147,7 +150,7 @@ class PurchaseItemController extends Controller
      */
     public function destroy(PurchaseItem $purchase_item)
     {
-
+        Gate::authorize('isAdmin');
         try {
 
             DB::beginTransaction();

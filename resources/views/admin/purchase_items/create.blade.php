@@ -53,6 +53,11 @@
                         <input type="number" step="0.01" name="unit_price" class="form-control @error('unit_price') is-invalid @enderror" value="{{ old('unit_price') }}" required>
                         @error('unit_price') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">sotilish narxi *</label>
+                        <input type="number" step="0.01" name="sell_price" class="form-control @error('sell_price') is-invalid @enderror" value="{{ old('sell_price') }}" required>
+                        @error('sell_price') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
 
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Yaroqlilik muddati</label>

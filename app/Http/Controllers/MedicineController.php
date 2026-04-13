@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Medicine;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Supprot\Facades\Gate;
 
 class MedicineController extends Controller
 {
@@ -29,11 +30,11 @@ public function store(Request $request)
         'generic_name'     => 'required|string',
         'category_id' => 'required|exists:categories,id', 
         'description' => 'nullable|string',
-        'barcode'     => 'required|string|max:100|unique:medicines,Barcode',
-        'sell_price'     => 'required|numeric|min:0',
-        'buy_price'     => 'required|numeric|min:0',
-        'quantity'        => 'required|integer|min:0',
-        'expiry_date'     => 'required|date|after:today',
+        'barcode'     => 'nullable|string|max:100|unique:medicines,Barcode',
+        'sell_price'     => 'nullable|numeric|min:0'  ?? 0,
+        'buy_price'     => 'nullable|numeric|min:0',
+        'quantity'        => 'nullable|integer|min:0',
+        'expiry_date'     => 'nullable|date|after:today',
         'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'is_active'      => 'required|boolean',
     ]);
@@ -42,7 +43,10 @@ public function store(Request $request)
     if ($request->hasFile('image')) {
         $validated['image'] = $request->file('image')->store('meicines', 'public');
     }
-
+    $validated['sell_price'] = $validated['sell_price'] ?? 0;
+    $validated['buy_price']= $validated['buy_price'] ?? 0;
+    $validated['quantity'] = $validated['quantity'] ?? 0;
+    $validated['expiry_date'] = $validated['expiry_date'] ?? '1970-01-01';
     Medicine::create($validated);
 
     return redirect()->back()->with('success', 'Mahsulot saqlandi');
@@ -95,6 +99,7 @@ public function store(Request $request)
 
 
     public function destroy(Medicine $medicine){
+        Gate::authorize('isAdmin');
     if($medicine->image){
         Storage::disk('public')->delete($medicine->image);
     }
