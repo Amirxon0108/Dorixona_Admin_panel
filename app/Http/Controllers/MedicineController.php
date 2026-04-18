@@ -21,7 +21,21 @@ class MedicineController extends Controller
     return view('admin.medicines.create', compact('categories'));
     }
 
+    public function search(Request $request)
+{
+    $query = $request->get('q', '');
 
+    $medicines = Medicine::with('category')
+        ->where(function($q) use ($query) {
+            $q->where('name', 'like', "%{$query}%")
+              ->orWhere('generic_name', 'like', "%{$query}%")
+              ->orWhere('barcode', 'like', "%{$query}%");
+        })
+        ->limit(10)
+        ->get();
+
+    return response()->json($medicines);
+}
    
 public function store(Request $request)
 {

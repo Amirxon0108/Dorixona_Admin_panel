@@ -32,20 +32,30 @@ use Illuminate\Supprot\Facades\Gate;
 Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/', [HomeController::class, 'index']);
 
-    
+    //Search routes
+    Route::get('medicine/search', [MedicineController::class, 'search'])->name('medicine.search');
+    Route::get('purchase/search', [PurchaseController::class, 'search'])->name('purchase.search');
+    Route::get('sale/search', [SalesController::class, 'search'])->name('sale.search');
+    Route::get('supplier/search', [SupplierController::class, 'search'])->name('supplier.search');
+    Route::get('category/search', [CategoryController::class, 'search'])->name('category.search');
+    Route::get('users/search', [UserController::class, 'search'])->name('users.search');
+    Route::get('purchase_item/search', [PurchaseItemController::class, 'search'])->name('purchase_item.search');
+
     Route::resource('/medicine',  MedicineController::class );
     Route::resource('/category', CategoryController::class);
     Route::resource('/supplier', SupplierController::class);
     Route::resource('/purchase', PurchaseController::class );
     Route::resource('/sale', SalesController::class);
     Route::get('sale/{sale}/invoice-pdf', [SalesController::class, 'downloadPdf'])->name('sale.print');
-    
+ 
     Route::resource('/purchase_item', PurchaseItemController::class);
     Route::get('/users/table', [UserController::class, 'table'])->middleware(['can:isAdmin'])->name('users.table');
     Route::middleware(['auth', 'can:isAdmin'])->group(function () {
     Route::resource('/users', UserController::class);
-});
     
+});
+
+
 });
 
 

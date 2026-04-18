@@ -218,4 +218,93 @@
       <script src="{{ asset('assets/js/pages/dashboard.init.js') }}"></script>
       <script src="{{ asset('assets/js/app.js') }}"></script>
    </body>
+   <script>
+(function () {
+    // Joriy sahifa qaysi bo'limda ekanini aniqlash
+    function getCurrentPage() {
+        const path = window.location.pathname;
+        if (path.includes('/users')) return 'users';
+        if (path.includes('/medicine')) return 'medicines';
+        // Default — hamma joyda medicines qidiradi
+        return 'medicines';
+    }
+
+    const ENDPOINTS = {
+        medicines: '/medicine/search',
+        users:     '/users/search',
+    };
+
+    const LABELS = {
+        medicines: { badge: 'Dori', cls: 'badge-med', nameKey: 'name', subKey: 'generic_name' },
+        users:     { badge: 'User', cls: 'badge-user', nameKey: 'name', subKey: 'email' },
+    };
+
+    const input   = document.getElementById('globalSearch');
+    const dropdown = document.getElementById('searchResults');
+
+    if (!input) return;
+
+    let debounceTimer;
+
+    input.addEventListener('input', function () {
+        const q = this.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (q.length < 2) {
+            dropdown.style.display = 'none';
+            return;
+        }
+
+        debounceTimer = setTimeout(() => fetchResults(q), 300);
+    });
+
+    // Tashqarini bosganda yopilsin
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.app-search')) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    async function fetchResults(q) {
+        const page     = getCurrentPage();
+        const endpoint = ENDPOINTS[page];
+        const label    = LABELS[page];
+
+        dropdown.innerHTML = '<div class="search-empty">Qidirilmoqda...</div>';
+        dropdown.style.display = 'block';
+
+        try {
+            const res  = await fetch(`${endpoint}?q=${encodeURIComponent(q)}`);
+            const data = await res.json();
+            renderResults(data, label, page);
+        } catch (err) {
+            dropdown.innerHTML = '<div class="search-empty">Xatolik yuz berdi</div>';
+        }
+    }
+
+    function renderResults(data, label, page) {
+        if (!data.length) {
+            dropdown.innerHTML = '<div class="search-empty">Hech narsa topilmadi</div>';
+            return;
+        }
+
+        const links = {
+            medicines: (item) => `/medicine/${item.id}`,
+            users:     (item) => `/users/${item.id}`,
+        };
+
+        dropdown.innerHTML = data.map(item => `
+            <a class="search-item" href="${links[page](item)}">
+                <span class="search-badge ${label.cls}">${label.badge}</span>
+                <div>
+                    <div style="font-size:13px; font-weight:500;">${item[label.nameKey]}</div>
+                    <div style="font-size:12px; color:#94a3b8;">${item[label.subKey] ?? ''}</div>
+                </div>
+            </a>
+        `).join('');
+
+        dropdown.style.display = 'block';
+    }
+})();
+</script>
 </html>

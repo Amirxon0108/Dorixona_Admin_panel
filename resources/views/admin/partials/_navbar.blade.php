@@ -1,3 +1,40 @@
+ <style>
+.app-search { position: relative; }
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    z-index: 9999;
+    max-height: 360px;
+    overflow-y: auto;
+    margin-top: 4px;
+}
+.search-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+.search-item:hover { background: #f8fafc; }
+.search-item:last-child { border-bottom: none; }
+.search-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 99px;
+}
+.badge-med { background: #dbeafe; color: #1d4ed8; }
+.badge-user { background: #dcfce7; color: #15803d; }
+.search-empty { padding: 16px; text-align: center; color: #94a3b8; font-size: 13px; }
+</style> 
  <header id="page-topbar">
             <div class="navbar-header">
                <div class="d-flex">
@@ -31,15 +68,23 @@
                   </i>
                   </button>
                   <!-- App Search-->
-                  <form class="app-search d-none d-lg-block">
-                     <div class="position-relative">
-                        <input class="form-control" placeholder="Search..." type="text"/>
-                        <button class="btn btn-primary" type="button">
-                        <i class="bx bx-search-alt align-middle">
-                        </i>
-                        </button>
-                     </div>
-                  </form>
+                  <!-- App Search -->
+<form class="app-search d-none d-lg-block" autocomplete="off">
+    <div class="position-relative">
+        <input 
+            id="globalSearch"
+            class="form-control" 
+            placeholder="Search..." 
+            type="text"
+            autocomplete="off"
+        />
+        <button class="btn btn-primary" type="button">
+            <i class="bx bx-search-alt align-middle"></i>
+        </button>
+    </div>
+    <!-- Dropdown natijalar -->
+    <div id="searchResults" class="search-dropdown" style="display:none;"></div>
+</form>
                </div>
                <div class="d-flex">
                   <div class="dropdown d-inline-block d-lg-none ms-2">
