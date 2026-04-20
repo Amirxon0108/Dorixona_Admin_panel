@@ -23,6 +23,15 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    public function search(Request $request) {
+        $query = $request->get('q', '');
+
+        $user = User::where('name', 'like', "%{$query}%")
+            ->orWhere('email', 'like' , "%{$query}%")
+            ->get();
+            return response()->json($user);
+            
+    }
 
     public function table(){
          $users =  User::all();

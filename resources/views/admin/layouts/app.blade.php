@@ -218,28 +218,41 @@
       <script src="{{ asset('assets/js/pages/dashboard.init.js') }}"></script>
       <script src="{{ asset('assets/js/app.js') }}"></script>
    </body>
-   <script>
-(function () {
-    // Joriy sahifa qaysi bo'limda ekanini aniqlash
+   <script>(function () {
     function getCurrentPage() {
         const path = window.location.pathname;
         if (path.includes('/users')) return 'users';
+        if (path.includes('/purchase_item')) return 'purchase_items'; // ✅ purchase dan oldin bo'lishi shart
+        if (path.includes('/purchase')) return 'purchases';
         if (path.includes('/medicine')) return 'medicines';
-        // Default — hamma joyda medicines qidiradi
+        if (path.includes('/category')) return 'categories';
         return 'medicines';
     }
 
     const ENDPOINTS = {
-        medicines: '/medicine/search',
-        users:     '/users/search',
+        medicines:      '/medicine/search',
+        users:          '/users/search',
+        purchases:      '/purchase/search',
+        purchase_items: '/purchase_item/search', // ✅ vergul qo'shildi
+        
     };
 
     const LABELS = {
-        medicines: { badge: 'Dori', cls: 'badge-med', nameKey: 'name', subKey: 'generic_name' },
-        users:     { badge: 'User', cls: 'badge-user', nameKey: 'name', subKey: 'email' },
+        medicines:      { badge: 'Dori',      cls: 'badge-med',        nameKey: 'name',        subKey: 'generic_name', quantityKey: 'quantity', subSmth: null },
+        users:          { badge: 'User',       cls: 'badge-user',       nameKey: 'name',        subKey: 'email',        quantityKey: null,       subSmth: null },
+        purchases:      { badge: 'Ombor',      cls: 'badge-purch',      nameKey: 'purchase_no', subKey: 'purchase_date',quantityKey: null,       subSmth: 'description' },
+        purchase_items: { badge: 'Ombor k-g',  cls: 'badge-purch-item', nameKey: 'batch_no',    subKey: 'expire_date',  quantityKey: null,       subSmth: null }, // ✅ users kaliti o'zgartirildi
+
     };
 
-    const input   = document.getElementById('globalSearch');
+    const links = {
+        medicines:      (item) => `/medicine/${item.id}`,
+        users:          (item) => `/users/${item.id}`,
+        purchases:      (item) => `/purchase/${item.id}`,
+        purchase_items: (item) => `/purchase_item/${item.id}`, 
+    };
+
+    const input    = document.getElementById('globalSearch');
     const dropdown = document.getElementById('searchResults');
 
     if (!input) return;
@@ -258,7 +271,6 @@
         debounceTimer = setTimeout(() => fetchResults(q), 300);
     });
 
-    // Tashqarini bosganda yopilsin
     document.addEventListener('click', function (e) {
         if (!e.target.closest('.app-search')) {
             dropdown.style.display = 'none';
@@ -275,36 +287,41 @@
 
         try {
             const res  = await fetch(`${endpoint}?q=${encodeURIComponent(q)}`);
-            const data = await res.json();
-            renderResults(data, label, page);
+            const json = await res.json();
+            renderResults(json.data, json.total, label, page);
         } catch (err) {
             dropdown.innerHTML = '<div class="search-empty">Xatolik yuz berdi</div>';
         }
     }
 
-    function renderResults(data, label, page) {
-        if (!data.length) {
+    function renderResults(data, total, label, page) {
+        if (!data || !data.length) {
             dropdown.innerHTML = '<div class="search-empty">Hech narsa topilmadi</div>';
             return;
         }
 
-        const links = {
-            medicines: (item) => `/medicine/${item.id}`,
-            users:     (item) => `/users/${item.id}`,
-        };
+        const countText = total > data.length
+            ? `${data.length} ta ko'rsatilmoqda (jami ${total} ta)`
+            : `${total} ta natija topildi`;
 
-        dropdown.innerHTML = data.map(item => `
+        const countBar = `<div style="padding:8px 16px; font-size:12px; color:#94a3b8; border-bottom:1px solid #f1f5f9;">${countText}</div>`;
+
+        const items = data.map(item => `
             <a class="search-item" href="${links[page](item)}">
                 <span class="search-badge ${label.cls}">${label.badge}</span>
                 <div>
-                    <div style="font-size:13px; font-weight:500;">${item[label.nameKey]}</div>
-                    <div style="font-size:12px; color:#94a3b8;">${item[label.subKey] ?? ''}</div>
+                    <div style="font-size:13px; font-weight:500;">${item[label.nameKey] ?? ''}</div>
+                    ${label.quantityKey ? `<div style="font-size:12px; color:#94a3b8;">${item[label.quantityKey]} dona</div>` : ''}
+                    ${label.subKey     ? `<div style="font-size:12px; color:#94a3b8;">${item[label.subKey] ?? ''}</div>` : ''}
+                    ${label.subSmth    ? `<div style="font-size:12px; color:#94a3b8;">${item[label.subSmth] ?? ''}</div>` : ''}
                 </div>
             </a>
         `).join('');
 
+        dropdown.innerHTML = countBar + items;
         dropdown.style.display = 'block';
     }
+
 })();
 </script>
 </html>

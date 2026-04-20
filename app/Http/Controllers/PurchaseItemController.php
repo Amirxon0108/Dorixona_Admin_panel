@@ -18,6 +18,31 @@ class PurchaseItemController extends Controller
         return view('admin.purchase_items.index', compact('purchase_items'));
     }
 
+
+    public function search(Request $request){
+        $query = $request->get('q','');
+        
+        
+           $total = PurchaseItem::where('batch_no', 'like', "%{$query}%")
+        ->orWhereHas('medicine', fn($q) => $q->where('name', 'like', "%{$query}%"))
+        ->orWhereHas('purchase', fn($q) => $q->where('purchase_no', 'like', "%{$query}%"))
+        ->count();
+
+    $purchase_items = PurchaseItem::with('purchase', 'medicine')
+        ->where(function($q) use ($query){
+            $q->where('batch_no', 'like', "%{$query}%")
+              ->orWhereHas('medicine', fn($q) => $q->where('name', 'like', "%{$query}%"))
+              ->orWhereHas('purchase', fn($q) => $q->where('purchase_no', 'like', "%{$query}%"));
+        })
+        ->limit(10)
+        ->get();
+        
+        return response()->json([
+            'total' => $total,
+            'data' => $purchase_items,
+        ]);
+        
+    }
     public function create()
     {
         $purchases = Purchase::all();

@@ -17,7 +17,27 @@ public function index(){
 }
 
 
+public function search(Request $request){
+    $query = $request->get('q', '');
 
+    $total = Purchase::where('purchase_no', 'like', "%{$query}%")
+     ->orWhere('purchase_date', 'like', "%{$query}%")
+        ->orWhere('description', 'like', "%{$query}%") 
+        ->count();
+
+
+    $purchases = Purchase::with('supplier', 'user')
+    ->where(function($q) use ($query){
+        $q->where('purchase_no', 'like', "%{$query}%")
+            ->orWhere('purchase_date', 'like', "%{$query}%")
+        ->orWhere('description', 'like', "%{$query}%") ;
+    })->limit(10)
+    ->get();
+    return response()->json([
+        'total' => $total,
+        'data' => $purchases,
+    ]);
+}
 
 public function create(){
     $purchases= Purchase::all();
