@@ -13,6 +13,22 @@ class CategoryController extends Controller
         return view('admin.category.index', compact('categories'));
     }
 
+    public function search(Request $request){
+        $query = $request->get('q', '');
+
+        $total = Category::where('name', 'like', "%{$query}%")
+        ->count();
+        
+
+        $categories = Category::where('name', 'like', "%{$query}%")
+        ->limit(10)
+        ->get();
+
+        return response()->json([
+            'total' => $total,
+            'data' => $categories,  
+            ]);
+        }
     public function create(){
         $categories = Category::all();
         return view('admin.category.create', compact('categories'));

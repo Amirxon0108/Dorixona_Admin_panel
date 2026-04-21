@@ -15,15 +15,13 @@ use  Illuminate\Http\RedirectResponse;
 
 
 class SalesController extends Controller
-{
-    public function index()
     {
-        
-         $sales = Sale::latest()->paginate(10);
-        $sales = Sale::latest()->paginate(10);
+        public function index()
+    {
+        $sales = Sale::with('user')->latest()->paginate(10); // ✅ ikki marta yozilgan edi
         return view('admin.sales.index', compact('sales'));
     }
-
+  
     public function create()        
     {
        
@@ -31,71 +29,74 @@ class SalesController extends Controller
         return view('admin.sales.create', compact('medicines'));
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'medicines' => 'required|array',
-            'medicines.*.id' => 'required|exists:medicines,id',
-            'medicines.*.quantity' => 'required|integer|min:1',
-            'payment_method' => 'required|string',
-            'discount' => 'nullable|numeric|min:0',
-            'note' => 'nullable|string|max:255',
+
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'medicines'             => 'required|array',
+        'medicines.*.id'        => 'required|exists:medicines,id',
+        'medicines.*.quantity'  => 'required|integer|min:1',
+        'payment_method'        => 'required|string',
+        'discount'              => 'nullable|numeric|min:0',
+        'note'                  => 'nullable|string|max:255',
+    ]);
+
+    try {
+        DB::beginTransaction();
+
+        $subTotal = 0;
+        $QQS_RATE = 0.12;
+
+        $sale = Sale::create([
+            'user_id'        => auth()->id(),
+            'invoice_number' => 'INV-' . time(),
+            'sub_total'      => 0,
+            'discount'       => $data['discount'] ?? 0,
+            'total_amount'   => 0,
+            'payment_method' => $data['payment_method'],
+            'status'         => 'paid',
+            'note'           => $data['note'] ?? null,
         ]);
 
-        try {
-            DB::beginTransaction();
-
-            $invoice = 'INV-' . time();
-            $subTotal = 0;
-
-            $sale = Sale::create([
-                'user_id' => auth()->id(),
-                'invoice_number' => $invoice,
-                'sub_total' => 0,
-                'discount' => $data['discount'] ?? 0,
-                'total_amount' => 0,
-                'payment_method' => $data['payment_method'],
-                'status' => 'paid',
-                'note' => $data['note'] ?? null,
-            ]);
-
-                foreach ($data['medicines'] as $item) {
+        foreach ($data['medicines'] as $item) {
             $medicine = Medicine::lockForUpdate()->findOrFail($item['id']);
+
             if ($medicine->quantity < $item['quantity']) {
-                throw new \Exception($medicine->name.' yetarli emas!');
+                throw new \Exception($medicine->name . ' omborda yetarli emas!');
             }
 
             $medicine->decrement('quantity', $item['quantity']);
-            $unitPrice = $medicine->sell_price;
-            $buyPrice = $medicine->buy_price;
-            $quantity = $item['quantity'];
-            $total = $unitPrice * $quantity;
+
+            $total = $medicine->sell_price * $item['quantity'];
 
             SalesItem::create([
-                'sale_id' => $sale->id,
+                'sale_id'     => $sale->id,
                 'medicine_id' => $medicine->id,
-                'quantity' => $quantity,
-                'unit_price' => $unitPrice,
-                'total_price' => $total
+                'quantity'    => $item['quantity'],
+                'unit_price'  => $medicine->sell_price,
+                'total_price' => $total,
             ]);
 
             $subTotal += $total;
-        }   
-
-            $sale->update([
-                'sub_total' => $subTotal,
-                'total_amount' => $subTotal - ($data['discount'] ?? 0)
-            ]);
-
-            DB::commit();
-
-            return redirect()->route(   'sale.index')->with('success','Savdo muvaffaqiyatli yakunlandi!');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error',$e->getMessage());
         }
+
+        $qqs        = $subTotal * $QQS_RATE;
+        $discount   = $data['discount'] ?? 0;
+        $totalAmount = max(0, $subTotal + $qqs - $discount);
+
+        $sale->update([
+            'sub_total'    => $subTotal,
+            'total_amount' => $totalAmount,
+        ]);
+
+        DB::commit();
+        return redirect()->route('sale.index')->with('success', 'Savdo muvaffaqiyatli yakunlandi!');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', $e->getMessage());
     }
+}
 
     public function show($id){
     $sale = Sale::with(['items.medicine','user'])->findOrFail($id);

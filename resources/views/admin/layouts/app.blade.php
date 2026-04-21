@@ -226,6 +226,7 @@
         if (path.includes('/purchase')) return 'purchases';
         if (path.includes('/medicine')) return 'medicines';
         if (path.includes('/category')) return 'categories';
+        if (path.includes('/supplier')) return 'suppliers';
         return 'medicines';
     }
 
@@ -234,22 +235,27 @@
         users:          '/users/search',
         purchases:      '/purchase/search',
         purchase_items: '/purchase_item/search', // ✅ vergul qo'shildi
-        
+        categories:     '/category/search',
+        suppliers:      '/supplier/search',
     };
 
     const LABELS = {
         medicines:      { badge: 'Dori',      cls: 'badge-med',        nameKey: 'name',        subKey: 'generic_name', quantityKey: 'quantity', subSmth: null },
-        users:          { badge: 'User',       cls: 'badge-user',       nameKey: 'name',        subKey: 'email',        quantityKey: null,       subSmth: null },
-        purchases:      { badge: 'Ombor',      cls: 'badge-purch',      nameKey: 'purchase_no', subKey: 'purchase_date',quantityKey: null,       subSmth: 'description' },
-        purchase_items: { badge: 'Ombor k-g',  cls: 'badge-purch-item', nameKey: 'batch_no',    subKey: 'expire_date',  quantityKey: null,       subSmth: null }, // ✅ users kaliti o'zgartirildi
-
+        users:          { badge: 'users',       cls: 'badge-user',       nameKey: 'name',        subKey: 'email',        quantityKey: null,       subSmth: null },
+        purchases:      { badge: 'Ombor tarixi',      cls: 'badge-purch',      nameKey: 'purchase_no', subKey: 'purchase_date',quantityKey: null,       subSmth: 'description' },
+        purchase_items: { badge: 'Omborga k-g',  cls: 'badge-purch-item', nameKey: 'batch_no',    subKey: 'expire_date',  quantityKey: null,       subSmth: null }, // ✅ users kaliti o'zgartirildi
+        categories:     { badge: 'kategory', cls: 'badge-cat', nameKey:'name',  subKey:null, quantityKey: null,       subSmth: null },
+        suppliers:      { badge: 'Dastavchik', cls: 'badge-sup', nameKey: 'name', subKey: 'phone' ,quantityKey: null,  subSmth: 'address'}
     };
 
     const links = {
         medicines:      (item) => `/medicine/${item.id}`,
         users:          (item) => `/users/${item.id}`,
         purchases:      (item) => `/purchase/${item.id}`,
-        purchase_items: (item) => `/purchase_item/${item.id}`, 
+        purchase_items: (item) => `/purchase_item/${item.id}`,
+        categories:     (item) => `/category/${item.id}`, 
+        suppliers:      (item) => `/supplier/${item.id}`,
+        
     };
 
     const input    = document.getElementById('globalSearch');

@@ -26,10 +26,17 @@ class UserController extends Controller
     public function search(Request $request) {
         $query = $request->get('q', '');
 
+        $total = User::where('name', 'like', "%{$query}%")
+        ->orWhere('email', 'like', "%{$query}%")
+        ->count();
+
         $user = User::where('name', 'like', "%{$query}%")
             ->orWhere('email', 'like' , "%{$query}%")
+            ->limit(10)
             ->get();
-            return response()->json($user);
+            return response()->json([
+            'total' => $total,    
+             'data' => $user,]);
             
     }
 

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Medicine;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Supprot\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
 
 class MedicineController extends Controller
 {
@@ -25,6 +25,11 @@ class MedicineController extends Controller
 {
     $query = $request->get('q', '');
 
+    $total = Medicine::where('name', 'like', "%{$query}%")
+    ->orWhere('generic_name', 'like', "%{$query}%")
+    ->orWhere('barcode', 'like', "%{$query}%")
+    ->count();
+
     $medicines = Medicine::with('category')
         ->where(function($q) use ($query) {
             $q->where('name', 'like', "%{$query}%")
@@ -34,7 +39,9 @@ class MedicineController extends Controller
         ->limit(10)
         ->get();
 
-    return response()->json($medicines);
+    return response()->json([
+        'total' => $total, 
+        'data' => $medicines, ]);
 }
    
 public function store(Request $request)

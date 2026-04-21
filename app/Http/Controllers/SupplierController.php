@@ -29,6 +29,29 @@ class SupplierController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function search(Request $request){
+
+    $query = $request->get('q', '');
+
+    $total = Supplier::where('name', 'like', "%{$query}%")
+    ->orWhere('phone', 'like', "%{$query}%")
+    ->orWhere('address', 'like', "%{$query}%")
+    ->count();
+
+    $suppliers = Supplier::where('name', 'like', "%{$query}%")
+    ->orWhere('phone', 'like', "%{$query}%")
+    ->orWhere('address', 'like', "%{$query}%")
+    ->limit(10)
+    ->get();
+
+    return response()->json([
+        'total' => $total,
+        'data'  => $suppliers,
+    ]);
+   
+    }
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
