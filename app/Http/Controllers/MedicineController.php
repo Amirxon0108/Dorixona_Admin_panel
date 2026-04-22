@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Medicine;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Log;
 use Illuminate\Support\Facades\Gate;
 
 class MedicineController extends Controller
@@ -17,6 +18,7 @@ class MedicineController extends Controller
 
 
     public function create(){
+       
         $categories = Category::orderBy('name','asc')->get();
     return view('admin.medicines.create', compact('categories'));
     }
@@ -52,7 +54,7 @@ public function store(Request $request)
         'category_id' => 'required|exists:categories,id', 
         'description' => 'nullable|string',
         'barcode'     => 'nullable|string|max:100|unique:medicines,Barcode',
-        'sell_price'     => 'nullable|numeric|min:0'  ?? 0,
+        'sell_price'     => 'nullable|numeric|min:0' ,
         'buy_price'     => 'nullable|numeric|min:0',
         'quantity'        => 'nullable|integer|min:0',
         'expiry_date'     => 'nullable|date|after:today',
@@ -68,8 +70,22 @@ public function store(Request $request)
     $validated['buy_price']= $validated['buy_price'] ?? 0;
     $validated['quantity'] = $validated['quantity'] ?? 0;
     $validated['expiry_date'] = $validated['expiry_date'] ?? '1970-01-01';
-    Medicine::create($validated);
+   
+   $medicine = Medicine::create($validated);
 
+    Log::create( [
+    'user_id' => auth()->id(),
+    'action' => 'Dori qoshildi',
+    'description' => json_encode([
+    'medicine_id' => $medicine->id,
+    'name' => $medicine->name,
+    'quantity' => $medicine->quantity,
+    'sell_price' => $medicine->sell_price,
+    'buy_price' => $medicine->buy_price,
+    'category_id' => $medicine->category_id
+    ])
+    
+    ]);
     return redirect()->back()->with('success', 'Mahsulot saqlandi');
 }
 
@@ -99,6 +115,8 @@ public function store(Request $request)
         'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         'is_active'      => 'required|boolean',
     ]);
+    
+    $oldData = $medicine->toArray();
     if($request->hasFile('image')){
         if($medicine->image){
             Storage::disk('public')->delete($medicine->image);
@@ -107,6 +125,15 @@ public function store(Request $request)
 
     }
     $medicine->update($validated);
+    $newData = $medicine->fresh()->toArray();
+    Log::create([
+        'user_id' => auth()->id() ,
+        'action' => 'Dori Yangilandi',
+        'description' => json_encode([
+            'old' => $oldData,
+            'new' => $newData,
+        ]) 
+    ]);
     return redirect()->route('medicine.index')->with('success', 'Malumot yangilandi ');
     }
 
@@ -121,10 +148,24 @@ public function store(Request $request)
 
     public function destroy(Medicine $medicine){
         Gate::authorize('isAdmin');
+        Log::create([
+    'user_id' => auth()->id(),
+    'action' => 'Dori ochirildi',
+    'description' => json_encode([
+    'medicine_id' => $medicine->id,
+    'name' => $medicine->name,
+    'quantity' => $medicine->quantity,
+    'sell_price' => $medicine->sell_price,
+    'buy_price' => $medicine->buy_price,
+    'category_id' => $medicine->category_id])
+    ]);
+
     if($medicine->image){
         Storage::disk('public')->delete($medicine->image);
     }
-    $medicine->delete($medicine = 'deleted_at' );
+    $medicine->delete();
+    
+    
     return redirect()->route('medicine.index')->with('success', 'Malumot ochirildi');
     }
 }

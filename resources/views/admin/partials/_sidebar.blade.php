@@ -89,7 +89,7 @@
 @endcan
                      @can('isAdmin')
                      <li>
-                        <a href="#">
+                        <a href="{{ route('logs.index') }}">
                            <i data-feather="activity"></i>
                            <span data-key="t-logs">Loglar</span>
                         </a>

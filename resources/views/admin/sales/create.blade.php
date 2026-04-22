@@ -17,7 +17,7 @@
         <div class="card">
             <div class="card-header d-flex align-items-center gap-2">
                 <i class="bx bx-cart fs-5"></i>
-                <h5 class="mb-0">Yangi Savdo</h5>
+                <h5 class="mb-0">Yangi Savdo</h5>`
             </div>
             <div class="card-body">
 
