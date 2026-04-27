@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Purchase;
 use App\Models\Supplier;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+
 
 class PurchaseController extends Controller
 {
@@ -59,6 +61,12 @@ public function store(Request $request){
     ]);
 
     Purchase::create($validated);
+    
+    Log::create([
+        'user_id' => auth()->id(),
+        'action' => 'Omorga qoshildi',
+        'description' => '',
+    ]);
     return redirect()->back()->with('success', 'malumot qoshildi');
 }
 
@@ -89,6 +97,11 @@ $validated = $request->validate([
 
 $purchase->update($validated);
 
+Log::create([
+    'user_id' => auth()->id(),
+    'action'  => 'Ombor Yangilandi',
+    'description' => '',
+]);
 return redirect()->route('purchase.index')->with('success', 'Malumot yangilandi ');
 }
 
@@ -96,6 +109,11 @@ return redirect()->route('purchase.index')->with('success', 'Malumot yangilandi 
 public function destroy(Purchase $purchase){
     Gate::authorize('isAdmin');
  $purchase->delete();
+ Log::create([
+    'user_id' => auth()->id(),
+    'action' => 'Ombor ochirildi',
+    'description' => '',
+ ]);
  return redirect()->route('purchase.index')->with('success', 'Malumot ochirildi');  
 }
 }

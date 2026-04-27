@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PurchaseItem;
 use App\Models\Purchase;
 use App\Models\Medicine;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
@@ -85,7 +86,11 @@ class PurchaseItemController extends Controller
             $medicine->increment('quantity', $validated['quantity']);
 
             DB::commit();
-
+            Log::create([
+            'user_id' => auth()->id(),
+            'action'  => 'Omborga kelgan narsalar yangilandi',
+            'description' => '',
+            ]);
             return redirect()
                 ->route('purchase_item.index')
                 ->with('success','Dori muvaffaqiyatli kirim qilindi!');
@@ -93,6 +98,7 @@ class PurchaseItemController extends Controller
         } catch (\Exception $e) {
 
             DB::rollBack();
+
 
             return back()->with('error',$e->getMessage());
         }
@@ -157,6 +163,12 @@ class PurchaseItemController extends Controller
 
             DB::commit();
 
+            Log::create([
+                'user_id' => auth()->id(),
+                'action'  => 'ombor narsalar yangilandi ',
+                'description' => '',
+            ]);
+
             return redirect()
                 ->route('purchase_item.index')
                 ->with('success','Ma\'lumot yangilandi!');
@@ -189,6 +201,12 @@ class PurchaseItemController extends Controller
             $purchase_item->delete();
 
             DB::commit();
+
+            Log::create([
+                'user_id' => auth()->id(),
+                'action'  => " ombor narsalar o'chirildi ",
+                'description' => '',
+            ]);
 
             return redirect()
                 ->back()

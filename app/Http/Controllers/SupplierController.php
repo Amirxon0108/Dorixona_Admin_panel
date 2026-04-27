@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supplier;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -61,6 +62,13 @@ class SupplierController extends Controller
         ]);
 
         Supplier::create($validated);
+
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Yetkazib beruvchi yaratildi',
+            'description' => '',
+
+        ]);
         return redirect()->back()->with('success', 'malumot qoshildi');
     }
 
@@ -94,6 +102,12 @@ class SupplierController extends Controller
 
         $supplier->update($validated);
 
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Yetkazib beruvchi ozgartirildi',
+            'description' => '',
+
+        ]);
         return to_route('supplier.index')->with('success', 'yangilandi');
     }
 
@@ -104,6 +118,14 @@ class SupplierController extends Controller
     {
         Gate::authorize('isAdmin');
         $supplier->delete();
+
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Yetkazib beruvchi ochirildi',
+            'description' => '',
+
+        ]);
+
         return redirect()->back()->with('success', 'Malumot ochirildi');
     }
 }

@@ -65,7 +65,8 @@ public function store(Request $request)
     
     if ($request->hasFile('image')) {
         $validated['image'] = $request->file('image')->store('meicines', 'public');
-    }
+    }   
+    
     $validated['sell_price'] = $validated['sell_price'] ?? 0;
     $validated['buy_price']= $validated['buy_price'] ?? 0;
     $validated['quantity'] = $validated['quantity'] ?? 0;

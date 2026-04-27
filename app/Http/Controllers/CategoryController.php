@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Log;
 use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
@@ -41,6 +42,12 @@ class CategoryController extends Controller
         ]);
 
         Category::create($validated);
+
+        Log::create([
+            'user_id' => auth()->id(),
+            'action'  => 'Kategory qoshildi',
+            'description' => '',
+        ]);
         return redirect()->route('category.index')->with('succes','Malumot saqlandi');
     }
 
@@ -65,6 +72,13 @@ class CategoryController extends Controller
             'slug' => 'required|string|max:255'
         ]);
         $category->update($validated);
+
+        Log::create([
+            'user_id' => auth()->id(),
+            'action'  => 'Kategory yangilandi',
+            'description' => '',
+        ]);
+
         return redirect()->route('category.index')->with('success', 'Malumot yangilndi');
     }
 
@@ -72,6 +86,11 @@ class CategoryController extends Controller
      public function destroy(Category $category){
     Gate::authorize('isAdmin');
     $category->delete();
+    Log::create([
+            'user_id' => auth()->id(),
+            'action'  => 'Kategory ochirildi',
+            'description' => '',
+        ]);
     return redirect()->route('category.index')->with('success', 'Malumot ochirildi');
     }
 }           

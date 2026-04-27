@@ -31,7 +31,7 @@ use Illuminate\Supprot\Facades\Gate;
 
 
 Route::middleware(['auth', 'verified'])->group(function (){
-    Route::get('/', [HomeController::class, 'index']);
+    Route::get('/', [HomeController::class, 'index'])->name('index');
 
     //Search routes
     Route::get('medicine/search', [MedicineController::class, 'search'])->name('medicine.search');

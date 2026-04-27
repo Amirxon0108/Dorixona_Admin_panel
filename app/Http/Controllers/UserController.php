@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserStoreRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Log;
 use App\Models\Role;
 use Illuminate\Support\Facades\Gate;    
 use Illuminate\Support\Facades\Auth;
@@ -65,7 +66,11 @@ class UserController extends Controller
         $data['password'] = bcrypt($data['password']);
 
         User::create($data);
-
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Foydalanuvchi qoshildi',
+            'description' => '',
+        ]);
         return to_route('users.table')->with('success', 'User Yaratildi ');
 
     }
@@ -102,6 +107,12 @@ class UserController extends Controller
 
         $user->update($validated);
 
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Foydalanuvchi yangilandi',
+            'description' => '',
+        ]);
+
         return redirect()->route('users.table')->with('success', 'User updated successfully');
     }
 
@@ -112,6 +123,11 @@ class UserController extends Controller
     {
         Gate::authorize('isAdmin');
         $user->delete();
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Foydalanuvchi ochirildi',
+            'description' => '',
+        ]);
         return redirect()->route('users.table')->with('success', 'User deleted successfully.');
     }
 }

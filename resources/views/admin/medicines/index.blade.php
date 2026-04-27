@@ -44,7 +44,7 @@
                                     <td>{{ $med->category->name ?? 'Noma\'lum' }}</td>
                                     <td>
                                         <small class="text-danger">K: {{ number_format($med->buy_price, 0) }}</small> / 
-                                        <small class="text-success">S: {{ number_format($med->sell_price, 0) }}</small>
+                                        <small class="text-success">S: {{ number_format($med->sell_price + $med->sell_price * 0.12, 0) }}</small>
                                     </td>
                                     <td>{{ $med->quantity }}</td>
                                     <td>

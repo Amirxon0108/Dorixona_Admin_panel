@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Sale;
 use App\Models\SalesItem;
 use App\Models\Medicine;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -90,6 +91,11 @@ public function store(Request $request)
         ]);
 
         DB::commit();
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Dori Sotildi',
+            'description' => '',
+        ]);
         return redirect()->route('sale.index')->with('success', 'Savdo muvaffaqiyatli yakunlandi!');
 
     } catch (\Exception $e) {
@@ -123,6 +129,11 @@ public function store(Request $request)
             }
         }
         $sale->delete();
+        Log::create([
+            'user_id' => auth()->id(),
+            'action' => 'Dori Sotilgani ochirildi',
+            'description' => '',
+        ]);
         return redirect()->route('sale.index')->with('success','Savdo muvaffaqiyatli o\'chirildi!');
 
     }
