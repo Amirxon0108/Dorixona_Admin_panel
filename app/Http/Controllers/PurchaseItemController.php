@@ -57,6 +57,7 @@ class PurchaseItemController extends Controller
      */
     public function store(Request $request)
     {
+         Gate::authorize('isAdmin');
         $validated = $request->validate([
             'purchase_id' => 'required|exists:purchases,id',
             'medicine_id' => 'required|exists:medicines,id',

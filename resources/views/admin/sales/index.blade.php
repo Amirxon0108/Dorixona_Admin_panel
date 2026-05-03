@@ -3,29 +3,64 @@
 
 @section('content')
 
+
      <div class="container-fluid">
       <!-- start page title -->
-      <div class="row">
-       <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-         <h4 class="mb-sm-0 font-size-18">
-          Invoice List
-         </h4>
-         <div class="page-title-right">
-          <ol class="breadcrumb m-0">
-           <li class="breadcrumb-item">
-            <a href="javascript: void(0);">
-             Invoices
-            </a>
-           </li>
-           <li class="breadcrumb-item active">
-            Invoice List
-           </li>
-          </ol>
-         </div>
+      
+       <div class="page-heading fade-up">
+        <h1>Savdolar</h1>
+        <p>Barcha sotuvlar va invoice'lar ro'yxati</p>
+    </div>
+
+ <div class="row g-3 mb-3">
+
+    <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center p-2 border rounded">
+            <i class="bx bx-receipt fs-5 text-success me-2"></i>
+            <div>
+                <div class="small text-muted">Jami savdolar</div>
+                <div class="fw-bold">{{ $sales->total() }}</div>
+            </div>
         </div>
-       </div>
-      </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center p-2 border rounded">
+            <i class="bx bx-check-circle fs-5 text-success me-2"></i>
+            <div>
+                <div class="small text-muted">To'langan</div>
+                <div class="fw-bold">
+                    {{ $sales->getCollection()->where('status','paid')->count() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center p-2 border rounded">
+            <i class="bx bx-time-five fs-5 text-warning me-2"></i>
+            <div>
+                <div class="small text-muted">Kutilmoqda</div>
+                <div class="fw-bold">
+                    {{ $sales->getCollection()->where('status','pending')->count() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center p-2 border rounded">
+            <i class="bx bx-x-circle fs-5 text-danger me-2"></i>
+            <div>
+                <div class="small text-muted">Bekor qilingan</div>
+                <div class="fw-bold">
+                    {{ $sales->getCollection()->where('status','cancelled')->count() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
       <!-- end page title -->
       <div class="row">
        <div class="col-lg-12">
@@ -144,7 +179,7 @@
 </td>
 
 <td>
-{{ number_format($sale->total_amount + $sale->total_amount/100*12) }}
+{{ number_format($sale->total_amount ) }}
 </td>
 
 <td>

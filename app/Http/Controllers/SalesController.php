@@ -25,7 +25,7 @@ class SalesController extends Controller
   
     public function create()        
     {
-       
+       Gate::authorize('isAdmin');
         $medicines = Medicine::where('quantity','>',0)->get();
         return view('admin.sales.create', compact('medicines'));
     }
@@ -33,6 +33,7 @@ class SalesController extends Controller
 
 public function store(Request $request)
 {
+    Gate::authorize('isAdmin');
     $data = $request->validate([
         'medicines'             => 'required|array',
         'medicines.*.id'        => 'required|exists:medicines,id',

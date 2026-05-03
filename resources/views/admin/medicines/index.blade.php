@@ -57,8 +57,8 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
                                             <a href="{{ route('medicine.show', $med->id) }}" class="btn btn-sm btn-info text-white">Ko'rish</a>
-                                            <a href="{{ route('medicine.edit', $med->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                            @can("isAdmin")
+                                          @can("isAdmin")   <a href="{{ route('medicine.edit', $med->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                           
                                             <form action="{{ route('medicine.destroy', $med->id) }}" method="POST" onsubmit="return confirm('Haqiqatdan ham o\'chirmoqchimisiz?')">
                                                 @csrf @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>

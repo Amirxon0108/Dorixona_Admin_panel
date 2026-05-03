@@ -39,8 +39,8 @@
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="{{ route('category.show', $category->id) }}" class="btn btn-sm btn-info text-white">Ko'rish</a>
-                                        <a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-warning text-white">Edit</a>
-                                        @can("isAdmin")
+                                      @can("isAdmin")    <a href="{{ route('category.edit', $category->id) }}" class="btn btn-sm btn-warning text-white">Edit</a>
+                                      
                                         <form action="{{ route('category.destroy', $category->id) }}" method="POST" onsubmit="return confirm('O\'chirmoqchimisiz?');">
                                             @csrf
                                             @method('DELETE')

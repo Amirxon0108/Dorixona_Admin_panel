@@ -66,7 +66,7 @@
 </tr>
 
 <tr>
-<th colspan="4" style="text-align:right;">Hammasi</th>
+<th colspan="4" style="text-align:right;"> Hammasi</th>
 <td><strong>{{ number_format($sale->total_amount + $sale->total_amount/100*12, 2) }} so'm</strong></td>
 </tr>
 

@@ -42,8 +42,8 @@
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="{{ route('purchase_item.show', $purchase_item->id) }}" class="btn btn-sm btn-info text-white">Ko'rish</a>
-                                        <a href="{{ route('purchase_item.edit', $purchase_item->id) }}" class="btn btn-sm btn-warning text-white">Edit</a>
-                                        @can("isAdmin")
+                                     @can("isAdmin")    <a href="{{ route('purchase_item.edit', $purchase_item->id) }}" class="btn btn-sm btn-warning text-white">Edit</a>
+                                       
                                         <form action="{{ route('purchase_item.destroy', $purchase_item->id) }}" method="POST" onsubmit="return confirm('O\'chirmoqchimisiz?');">
                                             @csrf
                                             @method('DELETE')

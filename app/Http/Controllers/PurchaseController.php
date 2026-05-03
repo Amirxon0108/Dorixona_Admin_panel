@@ -49,6 +49,7 @@ return view('admin.purchases.create', compact('suppliers', 'users','purchases'))
 }
 
 public function store(Request $request){
+     Gate::authorize('isAdmin');
     $validated = $request->validate([
         'supplier_id'   => 'required|exists:suppliers,id',
         'user_id'       => 'required|exists:users,id',
